@@ -1,0 +1,54 @@
+import { useState, useEffect } from "react";
+import Swal from "sweetalert2";
+import axios from "axios";
+import { Link } from "react-router-dom";
+
+function Sidebar() {
+
+    return (
+        <>
+            <aside className="main-sidebar sidebar-dark-primary elevation-4">
+                <a href="#" className="brand-link">
+                    <img src="dist/img/logo-top.png"  className="brand-image img-circle elevation-3" style={{ opacity: .8 }} />
+                    <span className="brand-text">Let's Shop!</span>
+                </a>
+                <div className="sidebar">
+                    <div className="user-panel mt-3 pb-3 mb-3 d-flex">
+                    <i class="fa-solid fa-user mt-2 ms-4" style={{color: "#ffffff"}}></i>
+                        <div className="info">
+
+                            <span className="text-light ms-1 d-block">Alexander Pierce</span>
+                        </div>
+                    </div>
+                    <nav className="mt-2">
+                        <ul className="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
+                            <li className="nav-item menu-open">
+
+                                <ul className="nav nav-treeview">
+                                    <li className="nav-item">
+                                        <a href="#" className="nav-link">
+                                            <i class="fa-solid fa-chart-line ms-1"></i>
+                                            <p className='ms-2'>
+                                                Dashboard
+                                            </p>
+                                        </a>
+                                    </li>
+                                    <li className="nav-item">
+                                        <a href="#" className="nav-link">
+                                        <i className="fa-solid fa-cart-plus ms-1"></i>
+                                            <p className='ms-2'>
+                                                สินค้า
+                                            </p>
+                                        </a>
+                                    </li>
+                                </ul>
+                            </li>
+                        </ul>
+                    </nav>
+                </div >
+
+            </aside >
+        </>
+    )
+}
+export default Sidebar;
