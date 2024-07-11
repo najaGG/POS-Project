@@ -1,6 +1,6 @@
 const express = require('express');
 const app = express();
-const ProductModel = require('../models/ProductModel');
+const ProductImageModel = require('../models/ProductImageModel');
 
 
 
