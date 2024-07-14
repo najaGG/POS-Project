@@ -6,8 +6,8 @@ const AdminModel = conn.define('admin',{
         primaryKey: true,
         autoIncrement: true,
     },
-    name:{
-        type: DataTypes.STRING
+    phone:{
+        type: DataTypes.BIGINT,
     },
     pws:{
         type: DataTypes.BIGINT,
