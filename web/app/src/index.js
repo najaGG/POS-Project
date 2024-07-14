@@ -4,11 +4,12 @@ import './index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
 import Home from './pages/Home';
+import TEST from './pages/AdminReg'
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
 
-    <Home />
+    <TEST />
 );
 
 // If you want to start measuring performance in your app, pass a function
