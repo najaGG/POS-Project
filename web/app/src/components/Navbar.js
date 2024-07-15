@@ -13,11 +13,13 @@ function Navbar() {
                     <li class="nav-item">
                         <a class="nav-link" data-widget="pushmenu" href="#" role="button"><i class="fas fa-bars"></i></a>
                     </li>
-                    
                 </ul>
-                </nav>
-            </>
-            )
+                <div class="clearfix">
+                    <button class="btn btn-outline-success float-end" type="submit">Reg</button>
+                </div>
+            </nav>
+        </>
+    )
 }
 
-            export default Navbar;
+export default Navbar;
