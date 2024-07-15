@@ -11,7 +11,14 @@ function Home() {
 
     const handleSave = async () => {
         try {
-            await axios.post(config.api_path + '/users/insert' , user).then(res => {
+            if(user.phone === undefined || user.pws === undefined){
+                Swal.fire({
+                    title:'โปรดระบุข้อมูลให้ครบถ้วน',
+                    icon: 'warning',
+                    timer: 3000
+                })
+            }else {
+                await axios.post(config.api_path + '/users/insert' , user).then(res => {
                 if (res.data.message === 'success') {
                     Swal.fire({
                         title: 'บันทึกข้อมูล',
@@ -23,11 +30,13 @@ function Home() {
             }).catch(err => {
                 throw err.response.data
             })
+        }
+            
 
         } catch (e) {
             Swal.fire({
                 title: "Error",
-                text: e.message,
+                text: "ระบุข้อมูลไม่ครบ",
                 icon: "error",
             })
         }
@@ -44,7 +53,7 @@ function Home() {
                         className="form-control" />
                 </div>
                     <div className="mt-3 col-6">
-                        <label>Password</label>
+                        <label>PIN digit</label>
                         <input value={user.pws} onChange={e => setUser({ ...user, pws: e.target.value })} 
                             type="password" className="form-control" />
                     </div>

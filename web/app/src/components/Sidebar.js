@@ -14,33 +14,43 @@ function Sidebar() {
                 </a>
                 <div className="sidebar">
                     <div className="user-panel mt-3 pb-3 mb-3 d-flex">
-                    <i class="fa-solid fa-user mt-2 ms-4" style={{color: "#ffffff"}}></i>
+                    <i class="fa-solid fa-user mt-3 ms-4" style={{color: "#ffffff"}}></i>
                         <div className="info">
-
-                            <span className="text-light ms-1 d-block">Alexander Pierce</span>
+                            <span className="text-light ms-1 d-block" style={{fontSize:20}}>Alexander Pierce</span>
                         </div>
                     </div>
                     <nav className="mt-2">
                         <ul className="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
-                            <li className="nav-item menu-open">
-
+                            <li className="nav-item menu-open"> 
                                 <ul className="nav nav-treeview">
+                                
                                     <li className="nav-item">
                                         <a href="#" className="nav-link">
-                                            <i class="fa-solid fa-chart-line ms-1"></i>
-                                            <p className='ms-2'>
+                                            <i class="fa-solid fa-chart-line fa-xl ms-1"></i>
+                                            <p className='ms-2' style={{fontSize:24}}>
                                                 Dashboard
                                             </p>
                                         </a>
                                     </li>
+                                    <hr className="custom-hr"/>
                                     <li className="nav-item">
                                         <a href="#" className="nav-link">
-                                        <i className="fa-solid fa-cart-plus ms-1"></i>
-                                            <p className='ms-2'>
+                                        <i className="fa-solid fa-cart-plus fa-xl ms-1"></i>
+                                            <p className='ms-3'style={{fontSize:24}}>
                                                 สินค้า
                                             </p>
                                         </a>
                                     </li>
+                                    <hr className="custom-hr"/>
+                                    <li className="nav-item">
+                                        <a href="#" className="nav-link">
+                                        <i class="fa-solid fa-user-tie fa-xl ms-1"></i>
+                                            <p className='ms-3' style={{fontSize:24}}>
+                                                Admin
+                                            </p>
+                                        </a>
+                                    </li>
+                                    <hr className="custom-hr"/>
                                 </ul>
                             </li>
                         </ul>
