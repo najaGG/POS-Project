@@ -56,7 +56,6 @@ function Sidebar() {
                         </ul>
                     </nav>
                 </div >
-
             </aside >
         </>
     )
