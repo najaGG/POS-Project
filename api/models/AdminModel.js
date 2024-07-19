@@ -11,6 +11,10 @@ const AdminModel = conn.define('admin',{
     },
     pws:{
         type: DataTypes.BIGINT,
+    },
+    role:{
+        type: DataTypes.STRING,
+        defaultValue: 'admin'
     }
 })
 

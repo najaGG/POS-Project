@@ -14,6 +14,10 @@ const MemberModel = conn.define('member',{
     },
     AdminID:{
         type: DataTypes.BIGINT
+    },
+    role:{
+        type: DataTypes.STRING,
+        defaultValue:'member'
     }
 })
 
