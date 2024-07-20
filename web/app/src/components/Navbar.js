@@ -1,10 +1,11 @@
-
-import Swal from 'sweetalert2';
-import { useNavigate } from 'react-router-dom';
+import { useState, useEffect } from "react";
+import Swal from "sweetalert2";
 import axios from "axios";
-import { useState } from 'react'
+import config from "../config";
+import { Link } from "react-router-dom";
 
 function Navbar() {
+
 
     return (
         <>
@@ -14,9 +15,7 @@ function Navbar() {
                         <a class="nav-link" data-widget="pushmenu" href="#" role="button"><i class="fas fa-bars"></i></a>
                     </li>
                 </ul>
-                <div class="clearfix">
-                    <button class="btn btn-outline-success float-end" type="submit">Reg</button>
-                </div>
+
             </nav>
         </>
     )

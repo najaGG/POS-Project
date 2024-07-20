@@ -5,6 +5,7 @@ import './App.css';
 import reportWebVitals from './reportWebVitals';
 import Home from './pages/Home';
 import RegAdmin from './pages/AdminReg'
+import Product from './pages/product';
 import{
     createBrowserRouter,
     RouterProvider,
@@ -18,6 +19,10 @@ const router = createBrowserRouter([
     {
         path:"/",
         element: <Home />
+    },
+    {
+        path:"/product",
+        element: <Product />
     }
 ]);
 
