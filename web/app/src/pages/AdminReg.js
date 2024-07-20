@@ -4,87 +4,87 @@ import config from "../config";
 import Swal from "sweetalert2";
 import { useEffect, useState } from "react";
 import Modal from "../components/Model";
-
+import './reg.css'
 function Home() {
-    const [user, setUser] = useState({});
-    const [users, setUsers] = useState([]);
-    const [password, setPassword] = useState('');
-    useEffect(() => {
-        Login();
-    },[])
+    const [user, setUser] = useState();
+    const [pws, setPws] = useState();
 
-    const handleSave = async () => {
+
+    const Login = () => {
+        const btnlogin = document.getElementById('nonClosableModal');
+        btnlogin.click();
+    }
+    const handleLogin = async () => {
         try {
-            if (user.phone === undefined || user.pws === undefined) {
+            if (user === undefined || pws === undefined) {
                 Swal.fire({
                     title: 'โปรดระบุข้อมูลให้ครบถ้วน',
                     icon: 'warning',
-                    timer: 3000
-                })
-            } else {
-                await axios.post(config.api_path + '/users/insert', user).then(res => {
+                    timer: 2000
+                });
+            }
+            else {
+                const payload = {
+                    phone: user,
+                    pws: pws
+                }
+                await axios.post(config.api_path + '/users/login', payload).then(res => {
                     if (res.data.message === 'success') {
                         Swal.fire({
-                            title: 'บันทึกข้อมูล',
-                            text: "สำเร็จ",
+                            title: 'โปรดจดจำรหัสผ่านของท่าน',
                             icon: 'success',
-                            timer: 2000
+                            text: 'เพื่อสิทธิประโยชน์ของท่านเอง',
+                            showConfirmButton: true
                         });
+                        localStorage.setItem(config.token_name, res.data.token);
                     }
                 }).catch(err => {
-                    throw err.response.data
+                    throw err.response.data;
                 })
             }
         } catch (e) {
             Swal.fire({
                 title: "Error",
-                text: "ระบุข้อมูลไม่ครบ",
+                text: e.message,
                 icon: "error",
             })
         }
     }
-    const Login = () => {
-        const btnlogin = document.getElementById('login');
-            btnlogin.click();
-    }
-    const handleLogin = async () => {
-        if (user.phone === undefined || user.pws === undefined) {
-                Swal.fire({
-                    title: 'โปรดระบุข้อมูลให้ครบถ้วน',
-                    icon: 'warning',
-                    timer: 3000
-                })
-            }else{
+    const numpad = () => {
 
-            }
     }
     return (
         <>
-            <button data-toggle="modal" data-target="#modalUser"
-                className="btn invisible" title="Edit" id="login">
-            </button>
-            <Modal id='modalUser' title='Login' modalSize='modal-lg' className="Login">
-                <div className="container">
-                    <div className="text-center"><strong>Admin</strong></div>
-                    <div className="row">
-                        <div className="mt-2 col-6">
-                            <label>Phone</label>
-                            <input value={user.name} onChange={e => setUser({ ...user, phone: e.target.value })}
-                                className="form-control" />
-                        </div>
-                        <div className="mt-2 col-6">
-                            <label>PIN digit</label>
-                            <input value={user.pws} onChange={e => setUser({ ...user, pws: e.target.value })}
-                                type="password" className="form-control" />
-                        </div>
+            <div className="container mt-5">
+                <div className="text-center mb-2"><strong>โปรดระบุข้อมูลให้ครบถ้วน</strong></div>
+                <div className="row">
+                    <div className="mt-2 col-6 ">
+                        <label>Phone</label>
+                        <input id='out1' onChange={e => setUser(e.target.value)}
+                            className="form-control" readOnly />
                     </div>
-                    <div className="mt-3 text-center">
-                        <button id='comfirmS' onClick={handleLogin} className="btn btn-outline-success">
-                            <i class="fa-solid fa-user-check mr-2"></i>
-                            Login</button>
+                    <div className="mt-2 col-6">
+                        <label>PIN digit</label>
+                        <input id='out2' onChange={e => setPws(e.target.value)}
+                            type="password" className="form-control" readOnly />
                     </div>
                 </div>
-            </Modal>
+                <div className=" numpad mt-3 text-center">
+                    <button onClick={numpad} value={1} className="btn btn-outline-success">1</button>
+                    <button className="btn btn-outline-success">2</button>
+                    <button className="btn btn-outline-success">3</button>
+                    <button className="btn btn-outline-success">4</button>
+                    <button className="btn btn-outline-success">5</button>
+                    <button className="btn btn-outline-success">6</button>
+                    <button className="btn btn-outline-success">7</button>
+                    <button className="btn btn-outline-success">8</button>
+                    <button className="btn btn-outline-success">9</button>
+                    <button className="btn btn-outline-success">0</button>
+                    <button id='comfirmS' onClick={handleLogin} className="btn btn-outline-success">
+                        <i class="fa-solid fa-user-check mr-2"></i>
+                        Login</button>
+                </div>
+            </div>
         </>
     )
 }
