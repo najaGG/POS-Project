@@ -1,22 +1,20 @@
-import Template from "../components/Template";
 import axios from "axios";
 import config from "../config";
 import Swal from "sweetalert2";
-import { useEffect, useState } from "react";
-import Modal from "../components/Model";
+import { useState } from "react";
 import './reg.css'
+import { useNavigate } from "react-router-dom";
+
 function Home() {
-    const [user, setUser] = useState();
-    const [pws, setPws] = useState();
+    const [input1Value, setInput1Value] = useState('');
+    const [input2Value, setInput2Value] = useState('');
+    const [selectedInput, setSelectedInput] = useState(null);
 
+    const navigate = useNavigate();
 
-    const Login = () => {
-        const btnlogin = document.getElementById('nonClosableModal');
-        btnlogin.click();
-    }
     const handleLogin = async () => {
         try {
-            if (user === undefined || pws === undefined) {
+            if (input1Value === undefined || input2Value === undefined) {
                 Swal.fire({
                     title: 'โปรดระบุข้อมูลให้ครบถ้วน',
                     icon: 'warning',
@@ -25,8 +23,8 @@ function Home() {
             }
             else {
                 const payload = {
-                    phone: user,
-                    pws: pws
+                    phone: input1Value,
+                    pws: input2Value
                 }
                 await axios.post(config.api_path + '/users/login', payload).then(res => {
                     if (res.data.message === 'success') {
@@ -37,6 +35,7 @@ function Home() {
                             showConfirmButton: true
                         });
                         localStorage.setItem(config.token_name, res.data.token);
+                        navigate('/')
                     }
                 }).catch(err => {
                     throw err.response.data;
@@ -45,44 +44,54 @@ function Home() {
         } catch (e) {
             Swal.fire({
                 title: "Error",
-                text: e.message,
+                text: "พบข้อผิดพลาดโปรดตรวจสอบใหม่อีกครั้ง",
                 icon: "error",
             })
         }
     }
-    const numpad = () => {
-
+    const handleNumpadClick = (value) => {
+        if (selectedInput === 1) {
+            setInput1Value(prevValue => prevValue + value);
+        } else if (selectedInput === 2) {
+            setInput2Value(prevValue => prevValue + value);
+        }
+    };
+    const handledel = () => {
+        if (selectedInput === 1) {
+            setInput1Value(prevValue => prevValue.slice(0, -1));
+        } else if (selectedInput === 2) {
+            setInput2Value(prevValue => prevValue.slice(0, -1));
+        }
     }
     return (
         <>
-            <div className="container mt-5">
-                <div className="text-center mb-2"><strong>โปรดระบุข้อมูลให้ครบถ้วน</strong></div>
+            <div className="containers">
+                <div className="bg"></div>
+                <div className="form-container"> 
+                <div className="text-center mb-2" style={{fontSize:20}}>โปรดระบุข้อมูลให้ครบถ้วน</div>
                 <div className="row">
                     <div className="mt-2 col-6 ">
-                        <label>Phone</label>
-                        <input id='out1' onChange={e => setUser(e.target.value)}
-                            className="form-control" readOnly />
+                        <label style={{fontSize:18}}>Phone</label>
+                        <input onChange={e => setInput1Value(e.target.value)}
+                            className="form-control" value={input1Value} onFocus={() => setSelectedInput(1)} readOnly />
                     </div>
                     <div className="mt-2 col-6">
-                        <label>PIN digit</label>
-                        <input id='out2' onChange={e => setPws(e.target.value)}
-                            type="password" className="form-control" readOnly />
+                        <label style={{fontSize:18}}>PIN digit</label>
+                        <input onChange={e => setInput2Value(e.target.value)}
+                            type="password" className="form-control" value={input2Value} onFocus={() => setSelectedInput(2)} readOnly />
                     </div>
                 </div>
-                <div className=" numpad mt-3 text-center">
-                    <button onClick={numpad} value={1} className="btn btn-outline-success">1</button>
-                    <button className="btn btn-outline-success">2</button>
-                    <button className="btn btn-outline-success">3</button>
-                    <button className="btn btn-outline-success">4</button>
-                    <button className="btn btn-outline-success">5</button>
-                    <button className="btn btn-outline-success">6</button>
-                    <button className="btn btn-outline-success">7</button>
-                    <button className="btn btn-outline-success">8</button>
-                    <button className="btn btn-outline-success">9</button>
-                    <button className="btn btn-outline-success">0</button>
-                    <button id='comfirmS' onClick={handleLogin} className="btn btn-outline-success">
-                        <i class="fa-solid fa-user-check mr-2"></i>
-                        Login</button>
+                <div>
+                    <div className="numpad pad" style={{fontSize:20}}>
+                        {[1, 2, 3, 4, 5, 6, 7, 8, 9, 0].map((num) => (
+                            <button className="btn btn-outline-primary buttonREG"  key={num} onClick={() => handleNumpadClick(num.toString())}>
+                                {num}
+                            </button>
+                        ))}
+                        <button className="btn btn-outline-primary buttonREG" onClick={handledel}>Detele</button>
+                        <button className="btn btn-outline-primary buttonREG" onClick={handleLogin}>Login</button>
+                    </div>
+                </div>
                 </div>
             </div>
         </>
