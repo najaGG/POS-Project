@@ -28,7 +28,7 @@ function Home() {
                     phone: input1Value,
                     pws: hash
                 }
-                await axios.post(config.api_path + '/admin/insert', payload).then(res => {
+                await axios.post(config.api_path + '/admin/login', payload).then(res => {
                     if (res.data.message === 'success') {
                         Swal.fire({
                             title: 'โปรดจดจำรหัสผ่านของท่าน',
@@ -37,7 +37,7 @@ function Home() {
                             showConfirmButton: true
                         });
                         localStorage.setItem(config.token_name, res.data.token);
-                        navigate('/')
+                        navigate('/memberlogin')
                     }
                 }).catch(err => {
                     throw err.response.data;
@@ -70,7 +70,7 @@ function Home() {
             <div className="containers">
                 <div className="bg"></div>
                 <div className="form-container"> 
-                <div className="text-center mb-2" style={{fontSize:20}}>REGADMIN</div>
+                <div className="text-center mb-2" style={{fontSize:20}}>AdminPage</div>
                 <div className="row">
                     <div className="mt-2 col-6 ">
                         <label style={{fontSize:18}}>Phone</label>

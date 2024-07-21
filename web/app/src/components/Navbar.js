@@ -1,21 +1,41 @@
-import { useState, useEffect } from "react";
 import Swal from "sweetalert2";
 import axios from "axios";
 import config from "../config";
 import { Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 function Navbar() {
+
+    const navigate = useNavigate();
+
+    const handleSingout = () =>{
+        Swal.fire({
+            title: "ยืนยันการออก",
+            icon: 'question',
+            showCancelButton: true, 
+            showConfirmButton: true, 
+        }).then(res =>{
+            if(res.isConfirmed){
+                localStorage.removeItem(config.token_name);
+                navigate('/memberlogin');
+            }
+        })
+    }
 
 
     return (
         <>
-            <nav class="main-header navbar navbar-expand navbar-white navbar-light">
-                <ul class="navbar-nav">
-                    <li class="nav-item">
-                        <a class="nav-link" data-widget="pushmenu" href="#" role="button"><i class="fas fa-bars"></i></a>
+            <nav className="main-header navbar navbar-expand navbar-white navbar-light">
+                <ul className="navbar-nav">
+                    <li className="nav-item">
+                        <a className="nav-link" data-widget="pushmenu" href="#" role="button"><i className="fas fa-bars"></i></a>
                     </li>
                 </ul>
-
+                <ul className="navbar-nav ms-auto">
+                    <button className="btn btn-outline-danger" onClick={handleSingout}>
+                        <i className="fa fa-times me-2"></i> Sign out
+                    </button>
+                </ul>
             </nav>
         </>
     )

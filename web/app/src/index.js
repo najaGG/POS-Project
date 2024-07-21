@@ -6,6 +6,10 @@ import reportWebVitals from './reportWebVitals';
 import Home from './pages/Home';
 import RegAdmin from './pages/AdminReg'
 import Product from './pages/product';
+import Adminlogin from './pages/Adminlogin';
+import Memberlogin from './pages/Memberlogin';
+import Owner from './pages/Owner';
+
 import{
     createBrowserRouter,
     RouterProvider,
@@ -13,16 +17,28 @@ import{
 
 const router = createBrowserRouter([
     {
-        path: "/adminReg",
-        element: <RegAdmin />
+        path: "/",
+        element: <Adminlogin />
     },
     {
-        path:"/",
+        path:"/home",
         element: <Home />
     },
     {
         path:"/product",
         element: <Product />
+    },
+    {
+        path:"/RegAdmin",
+        element: <RegAdmin />
+    },
+    {
+        path:"/memberlogin",
+        element: <Memberlogin />
+    },
+    {
+        path:"/ownerLogin",
+        element: <Owner  />
     }
 ]);
 

@@ -3,10 +3,9 @@ const app = express();
 const AdminModel = require('../models/AdminModel');
 require('dotenv').config();
 const jwt = require('jsonwebtoken');
-const service = require('./service');
+const service = require('./Service');
 
-
-app.post('/users/insert', async (req, res) => {
+app.post('/admin/insert', async (req, res) => {
     try{
         let payload = req.body;
         await AdminModel.create(payload);
@@ -17,7 +16,7 @@ app.post('/users/insert', async (req, res) => {
     }
 })
 
-app.post('/users/login', async (req, res) => {
+app.post('/admin/login', async (req, res) => {
     try{
         const member = await AdminModel.findAll({
             where: {
@@ -36,6 +35,20 @@ app.post('/users/login', async (req, res) => {
     }catch(e){
         res.statusCode = 500;
         res.send({message: e});
+    }
+})
+
+app.get('/admin/info',service.Islogin, async (req, res) => {
+    try{
+        const token = service.getToken(req);
+        const payload = jwt.decode(token);
+        const Admin = await AdminModel.findByPk(payload.id,{
+            attributes: ['id','phone']
+        });
+        res.send({result:Admin , message: 'success'});
+    }catch(e){
+        res.statusCode = 500;
+        return res.send({message: e.message});
     }
 })
 
