@@ -28,7 +28,7 @@ function Home() {
                     phone: input1Value,
                     pws: hash
                 }
-                await axios.post(config.api_path + '/admin/insert', payload).then(res => {
+                await axios.post(config.api_path + '/owner/check', payload).then(res => {
                     if (res.data.message === 'success') {
                         Swal.fire({
                             title: 'โปรดจดจำรหัสผ่านของท่าน',
@@ -37,7 +37,7 @@ function Home() {
                             showConfirmButton: true
                         });
                         localStorage.setItem(config.token_name, res.data.token);
-                        navigate('/')
+                        navigate('/RegAdmin')
                     }
                 }).catch(err => {
                     throw err.response.data;
@@ -46,7 +46,7 @@ function Home() {
         } catch (e) {
             Swal.fire({
                 title: "Error",
-                text: "พบข้อผิดพลาดโปรดตรวจสอบใหม่อีกครั้ง",
+                text: e.message,
                 icon: "error",
             })
         }
@@ -67,33 +67,35 @@ function Home() {
     }
     return (
         <>
+        
             <div className="containers">
                 <div className="bg"></div>
-                <div className="form-container"> 
-                <div className="text-center mb-2" style={{fontSize:20}}>REGADMIN</div>
-                <div className="row">
-                    <div className="mt-2 col-6 ">
-                        <label style={{fontSize:18}}>Phone</label>
-                        <input onChange={e => setInput1Value(e.target.value)}
-                            className="form-control" value={input1Value} onFocus={() => setSelectedInput(1)} readOnly />
+                <div className="form-container">
+                    <div className="text-center mb-2" style={{ fontSize: 20 }}>Owner</div>
+                    <div className="row">
+                        <div className="mt-2 col-6 ">
+                            <label style={{ fontSize: 18 }}>Phone</label>
+                            <input onChange={e => setInput1Value(e.target.value)}
+                                className="form-control" value={input1Value} onFocus={() => setSelectedInput(1)} readOnly />
+                        </div>
+                        <div className="mt-2 col-6">
+                            <label style={{ fontSize: 18 }}>PIN digit</label>
+                            <input onChange={e => setInput2Value(e.target.value)}
+                                type="password" className="form-control" value={input2Value} onFocus={() => setSelectedInput(2)} readOnly />
+                        </div>
                     </div>
-                    <div className="mt-2 col-6">
-                        <label style={{fontSize:18}}>PIN digit</label>
-                        <input onChange={e => setInput2Value(e.target.value)}
-                            type="password" className="form-control" value={input2Value} onFocus={() => setSelectedInput(2)} readOnly />
+                    <div>
+                        <div className="numpad pad" style={{ fontSize: 20 }}>
+                            {[1, 2, 3, 4, 5, 6, 7, 8, 9, 0].map((num) => (
+                                <button className="btn btn-outline-primary buttonREG" key={num} onClick={() => handleNumpadClick(num.toString())}>
+                                    {num}
+                                </button>
+                            ))}
+                            <button className="btn btn-outline-primary buttonREG" onClick={handledel}>Detele</button>
+                            <button className="btn btn-outline-primary buttonREG" onClick={handleLogin}>Login</button>
+                        </div>
+                        
                     </div>
-                </div>
-                <div>
-                    <div className="numpad pad" style={{fontSize:20}}>
-                        {[1, 2, 3, 4, 5, 6, 7, 8, 9, 0].map((num) => (
-                            <button className="btn btn-outline-primary buttonREG"  key={num} onClick={() => handleNumpadClick(num.toString())}>
-                                {num}
-                            </button>
-                        ))}
-                        <button className="btn btn-outline-primary buttonREG" onClick={handledel}>Detele</button>
-                        <button className="btn btn-outline-primary buttonREG" onClick={handleLogin}>Login</button>
-                    </div>
-                </div>
                 </div>
             </div>
         </>

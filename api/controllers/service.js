@@ -22,5 +22,12 @@ module.exports = {
             res.statuscode = 401;
             return res.send('โปรดเข้าสู่ระบบ');
         }
+    },
+    getAdminId: (req) =>{
+        const jwt = require('jsonwebtoken');
+        const token = req.headers.authorization.replace('Bearer ', '');
+        const payLoad =jwt.decode(token);
+        return payLoad.id
     }
 }
+

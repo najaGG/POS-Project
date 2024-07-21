@@ -6,13 +6,13 @@ const MemberModel = conn.define('member',{
         primaryKey: true,
         autoIncrement: true
     },
-    name:{
+    pws:{
         type: DataTypes.STRING
     },
-    pws:{
+    AdminID:{
         type: DataTypes.BIGINT
     },
-    AdminID:{
+    phone:{
         type: DataTypes.BIGINT
     },
     role:{

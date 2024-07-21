@@ -1,6 +1,6 @@
 const conn = require('../connect');
 const { Sequelize, DataTypes } = require('sequelize');
-const AdminModel = conn.define('admin',{
+const OwnerModel = conn.define('owner',{
     id: {
         type: DataTypes.BIGINT,
         primaryKey: true,
@@ -14,10 +14,10 @@ const AdminModel = conn.define('admin',{
     },
     role:{
         type: DataTypes.STRING,
-        defaultValue: 'admin'
+        defaultValue: 'Owner'
     }
 })
 
-AdminModel.sync({alter:true});
+OwnerModel.sync({alter:true});
 
-module.exports = AdminModel;
+module.exports = OwnerModel;
