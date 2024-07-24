@@ -9,7 +9,7 @@ import Product from './pages/product';
 import Adminlogin from './pages/Adminlogin';
 import Memberlogin from './pages/Memberlogin';
 import Owner from './pages/Owner';
-
+import TEST from './pages/TEST';
 import{
     createBrowserRouter,
     RouterProvider,
@@ -39,6 +39,10 @@ const router = createBrowserRouter([
     {
         path:"/ownerLogin",
         element: <Owner  />
+    },
+    {
+        path:"/TEST",
+        element: <TEST  />
     }
 ]);
 
