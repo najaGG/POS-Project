@@ -38,11 +38,7 @@ io.on('connection', (socket) => {
     console.log('New client connected');
 
     socket.on('sendMessage', (message) => {
-        if(message === 1){
-            console.log(message)
-        }else{
-            console.log('none')
-        }
+        console.log(message);
     });
 
     socket.on('disconnect', () => {

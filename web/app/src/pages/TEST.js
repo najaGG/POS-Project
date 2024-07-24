@@ -8,7 +8,7 @@ function TEST() {
     const [chat, setChat] = useState([]);
 
     useEffect(() => {
-        socket.on('receive', (message) => {
+        socket.on('receiveMessage', (message) => {
             setChat((prevChat) => [...prevChat, message]);
         });
 
