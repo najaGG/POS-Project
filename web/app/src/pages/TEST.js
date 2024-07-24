@@ -1,13 +1,16 @@
 import React, { useState, useEffect } from 'react';
 import io from 'socket.io-client';
 
-const socket = io('http://localhost:3001'); // ตรวจสอบ URL และพอร์ต
+const socket = io('http://localhost:3555'); // ตรวจสอบ URL และพอร์ต
 
 function TEST() {
     const [message, setMessage] = useState('');
     const [chat, setChat] = useState([]);
 
     useEffect(() => {
+        
+    }, []);
+    const resivemessage =() => {
         socket.on('receiveMessage', (message) => {
             setChat((prevChat) => [...prevChat, message]);
         });
@@ -15,9 +18,6 @@ function TEST() {
         return () => {
             socket.off('receiveMessage');
         };
-    }, []);
-    const resivemessage =() => {
-        
     }
     const sendMessage = () => {
         socket.emit('sendMessage', message);

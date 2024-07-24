@@ -6,7 +6,7 @@ import './reg.css'
 import { useNavigate } from "react-router-dom";
 import hashSum from 'hash-sum';
 import io from 'socket.io-client';
-const socket = io('http://localhost:3001'); 
+const socket = io('http://localhost:3555'); 
 
 function Home() {
     const [input1Value, setInput1Value] = useState('');
