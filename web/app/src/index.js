@@ -10,6 +10,7 @@ import Adminlogin from './pages/Adminlogin';
 import Memberlogin from './pages/Memberlogin';
 import Owner from './pages/Owner';
 import TEST from './pages/TEST';
+import 'bootstrap/dist/css/bootstrap.min.css';
 import{
     createBrowserRouter,
     RouterProvider,
