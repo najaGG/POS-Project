@@ -39,7 +39,7 @@ io.on('connection', (socket) => {
 
     socket.on('sendMessage', (message) => {
         if(message === 1){
-            console.log('1')
+            console.log(message)
         }else{
             console.log('none')
         }
