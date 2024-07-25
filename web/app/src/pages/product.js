@@ -20,4 +20,3 @@ function Product() {
 export default Product;
 
 
-<img src="dist/img/logo-top.png" 
