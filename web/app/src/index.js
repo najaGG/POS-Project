@@ -10,7 +10,8 @@ import Adminlogin from './pages/Adminlogin';
 import Memberlogin from './pages/Memberlogin';
 import Owner from './pages/Owner';
 import TEST from './pages/TEST';
-import 'bootstrap/dist/css/bootstrap.min.css';
+import Edit from './pages/Edit';
+
 import{
     createBrowserRouter,
     RouterProvider,
@@ -44,7 +45,11 @@ const router = createBrowserRouter([
     {
         path:"/TEST",
         element: <TEST  />
-    }
+    },
+    {
+        path:"/Editproduct",
+        element: <Edit />
+    },
 ]);
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
