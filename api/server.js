@@ -1,7 +1,7 @@
 const express = require('express');
 const cors = require('cors');
 const app = express();
-const port = 3001
+const port = 3555
 const bodyParser = require('body-parser');
 
 app.use(cors());
@@ -15,7 +15,7 @@ const ProductImageControll = require('./controllers/ProductImageControll');
 const BuyproductControll = require('./controllers/BuyproductControll');
 const DashboardControll = require('./controllers/DashboardControll');
 const OwnerControll = require('./controllers/OwnerControll');
-const TEST = require('./controllers/ProductControll copy');
+
 app.use(DashboardControll);
 app.use(BuyproductControll);
 app.use(ProductImageControll);
@@ -38,11 +38,7 @@ io.on('connection', (socket) => {
     console.log('New client connected');
 
     socket.on('sendMessage', (message) => {
-        if(message === 1){
-            console.log(message)
-        }else{
-            console.log('none')
-        }
+        console.log(message);
     });
 
     socket.on('disconnect', () => {
