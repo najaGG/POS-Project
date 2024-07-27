@@ -6,13 +6,14 @@ import { useEffect, useState } from "react";
 import Modal from "../components/Model";
 
 function Home() {
-
     return (
         <>
             <Template>
+                
             </Template>
         </>
     )
 }
 
 export default Home;
+
