@@ -46,32 +46,13 @@ function Sidebar() {
                         <ul className="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
                             <li className="nav-item menu-open"> 
                                 <ul className="nav nav-treeview">
-                                
                                     <li className="nav-item">
-                                        <a href="#" className="nav-link">
-                                            <i class="fa-solid fa-chart-line fa-xl ms-1"></i>
-                                            <p className='ms-2' style={{fontSize:24}}>
-                                                Dashboard
-                                            </p>
-                                        </a>
-                                    </li>
-                                    <hr className="custom-hr"/>
-                                    <li className="nav-item">
-                                        <a href="#" className="nav-link">
-                                        <i className="fa-solid fa-cart-plus fa-xl ms-1"></i>
+                                        <Link to="/product" className="nav-link">
+                                            <i className="fa-solid fa-cart-plus fa-xl ms-1"></i>
                                             <p className='ms-3'style={{fontSize:24}}>
                                                 สินค้า
                                             </p>
-                                        </a>
-                                    </li>
-                                    <hr className="custom-hr"/>
-                                    <li className="nav-item">
-                                        <a href="#" className="nav-link">
-                                        <i class="fa-solid fa-user-tie fa-xl ms-1"></i>
-                                            <p className='ms-3' style={{fontSize:24}}>
-                                                Admin
-                                            </p>
-                                        </a>
+                                        </Link>
                                     </li>
                                     <hr className="custom-hr"/>
                                 </ul>
