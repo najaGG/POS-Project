@@ -1,6 +1,7 @@
 import Swal from "sweetalert2";
 import axios from "axios";
 import config from "../config";
+import configMember from "../configMember";
 import { Link } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
 
@@ -16,7 +17,7 @@ function Navbar() {
             showConfirmButton: true, 
         }).then(res =>{
             if(res.isConfirmed){
-                localStorage.removeItem(config.token_name);
+                localStorage.removeItem(configMember.token_name);
                 navigate('/memberlogin');
             }
         })

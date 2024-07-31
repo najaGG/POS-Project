@@ -18,6 +18,10 @@ const MemberModel = conn.define('member',{
     role:{
         type: DataTypes.STRING,
         defaultValue:'member'
+    },
+    coin:{
+        type: DataTypes.BIGINT,
+        defaultValue:0
     }
 })
 

@@ -1,5 +1,6 @@
 import axios from "axios";
 import config from "../config";
+import configMember from "../configMember";
 import Swal from "sweetalert2";
 import { useState } from "react";
 import './reg.css'
@@ -15,7 +16,7 @@ function Home() {
 
     const handleLogin = async () => {
         try {
-            if (input1Value === undefined || input2Value === undefined) {
+            if (input1Value === undefined && input2Value === null) {
                 Swal.fire({
                     title: 'โปรดระบุข้อมูลให้ครบถ้วน',
                     icon: 'warning',
@@ -36,8 +37,8 @@ function Home() {
                             text: 'เพื่อสิทธิประโยชน์ของท่านเอง',
                             showConfirmButton: true
                         });
-                        localStorage.setItem(config.token_name, res.data.token);
-                        navigate('/home')
+                        localStorage.setItem(configMember.token_name, res.data.token);
+                        navigate('/product')
                     }
                 }).catch(err => {
                     throw err.response.data;

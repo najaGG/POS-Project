@@ -3,7 +3,7 @@ const app = express();
 const AdminModel = require('../models/AdminModel');
 require('dotenv').config();
 const jwt = require('jsonwebtoken');
-const service = require('./Service');
+const service = require('./service');
 
 app.post('/admin/insert', async (req, res) => {
     try{

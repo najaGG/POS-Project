@@ -76,8 +76,11 @@ function Home() {
     };
     return (
         <>
+        
             <div className="containers">
+            
                 <div className="bg"></div>
+                
                 <div className="form-container"> 
                 <div className="text-center mb-2" style={{fontSize:20}}>AdminPage</div>
                 <div className="row">
@@ -101,10 +104,13 @@ function Home() {
                         ))}
                         <button className="btn btn-outline-primary buttonREG" onClick={handledel}>Detele</button>
                         <button className="btn btn-outline-primary buttonREG" onClick={handleLogin}>Login</button>
+                        
                     </div>
                 </div>
                 </div>
+                
             </div>
+            
         </>
     )
 }
