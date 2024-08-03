@@ -1,22 +1,25 @@
 import axios from "axios";
 import config from "../config";
-import configMember from "../configMember";
 import Swal from "sweetalert2";
 import { useState } from "react";
 import './reg.css'
 import { useNavigate } from "react-router-dom";
 import hashSum from 'hash-sum';
+import io from 'socket.io-client';
+const socket = io('http://localhost:3555');
 
-function Home() {
+function EditAdmin() {
     const [input1Value, setInput1Value] = useState('');
     const [input2Value, setInput2Value] = useState('');
     const [selectedInput, setSelectedInput] = useState(null);
+    const [message, setMessage] = useState('');
+    const [chat, setChat] = useState([]);
 
     const navigate = useNavigate();
 
     const handleLogin = async () => {
         try {
-            if (input1Value === undefined && input2Value === null) {
+            if (input1Value === undefined || input2Value === undefined) {
                 Swal.fire({
                     title: 'โปรดระบุข้อมูลให้ครบถ้วน',
                     icon: 'warning',
@@ -29,16 +32,16 @@ function Home() {
                     phone: input1Value,
                     pws: hash
                 }
-                await axios.post(config.api_path + '/member/insert', payload, config.headers()).then(res => {
+                await axios.post(config.api_path + '/admin/login', payload).then(res => {
                     if (res.data.message === 'success') {
                         Swal.fire({
-                            title: 'โปรดจดจำรหัสผ่านของท่าน',
-                            icon: 'success',
-                            text: 'เพื่อสิทธิประโยชน์ของท่านเอง',
+                            title: 'โปรดอย่าลืมกดออกจากระบบ',
+                            icon: 'warning',
+                            text: 'เพื่อป้องกันความเสียหายของท่าน',
                             showConfirmButton: true
                         });
-                        localStorage.setItem(configMember.token_name, res.data.token);
-                        navigate('/product')
+                        localStorage.setItem(config.token_name, res.data.token);
+                        navigate('/Editproduct')
                     }
                 }).catch(err => {
                     throw err.response.data;
@@ -66,16 +69,24 @@ function Home() {
             setInput2Value(prevValue => prevValue.slice(0, -1));
         }
     }
-    const handleLoginEdit = () =>{
-        console.log("1")
-        navigate('/EditAdmin')
+
+    const sendMessage = () => {
+        socket.emit('sendMessage', message);
+        setMessage('');
+    };
+
+    const handleBack = () =>{
+        navigate('/memberlogin')
     }
     return (
         <>
+
             <div className="containers">
+
                 <div className="bg"></div>
+
                 <div className="form-container">
-                    <div className="text-center mb-2" style={{ fontSize: 20 }}>โปรดระบุข้อมูลให้ครบถ้วน</div>
+                    <div className="text-center mb-2" style={{ fontSize: 20 }}>Admin Edit Login </div>
                     <div className="row">
                         <div className="mt-2 col-6 ">
                             <label style={{ fontSize: 18 }}>Phone</label>
@@ -97,19 +108,17 @@ function Home() {
                             ))}
                             <button className="btn btn-outline-primary buttonREG" onClick={handledel}>Detele</button>
                             <button className="btn btn-outline-primary buttonREG" onClick={handleLogin}>Login</button>
+
                         </div>
                     </div>
-
                 </div>
-
-                    <button className="btn btn-info toptext" onClick={handleLoginEdit}>
-                        <i class="fa-solid fa-user-tie" title="Admin only"></i>
+                <button className="btn btn-danger toptext" onClick={handleBack}>
+                        <i class="fa-solid fa-arrow-left" title="Back"></i>
                     </button>
-                
-
             </div>
+
         </>
     )
 }
 
-export default Home;
+export default EditAdmin;
