@@ -11,6 +11,7 @@ import Memberlogin from './pages/Memberlogin';
 import Owner from './pages/Owner';
 import TEST from './pages/TEST';
 import Edit from './pages/Edit';
+import EditAdmin from './pages/AdminEditlogin';
 
 import{
     createBrowserRouter,
@@ -50,6 +51,10 @@ const router = createBrowserRouter([
         path:"/Editproduct",
         element: <Edit />
     },
+    {
+        path:"/EditAdmin",
+        element: <EditAdmin/>
+    }
 ]);
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
