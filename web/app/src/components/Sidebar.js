@@ -57,21 +57,21 @@ function Sidebar() {
                                     </li>
                                     <hr className="custom-hr"/>
                                     <li className="nav-item">
-                                        <a href="#" className="nav-link">
+                                        <Link to = '/Editproduct' className="nav-link">
                                         <i className="fa-solid fa-cart-plus fa-xl ms-1"></i>
                                             <p className='ms-3'style={{fontSize:24}}>
                                                 แก้ไขสินค้า
                                             </p>
-                                        </a>
+                                        </Link>
                                     </li>
                                     <hr className="custom-hr"/>
                                     <li className="nav-item">
-                                        <a href="#" className="nav-link">
-                                        <i class="fa-solid fa-user-tie fa-xl ms-1"></i>
+                                        <Link to='/Allproduct' className="nav-link">
+                                        <i class="fa-brands fa-product-hunt fa-xl ms-1"></i>
                                             <p className='ms-3' style={{fontSize:24}}>
-                                                Product
+                                                All Product
                                             </p>
-                                        </a>
+                                        </Link>
                                     </li>
                                     <hr className="custom-hr"/>
                                 </ul>

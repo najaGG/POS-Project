@@ -13,6 +13,7 @@ import TEST from './pages/TEST';
 import Edit from './pages/Edit';
 import EditAdmin from './pages/AdminEditlogin';
 import Dashboard from './pages/Dashboard';
+import Allproduct from './pages/Admin All product';
 
 import{
     createBrowserRouter,
@@ -59,6 +60,10 @@ const router = createBrowserRouter([
     {
         path:"/Dashboard",
         element: <Dashboard />
+    },
+    {
+        path:"/Allproduct",
+        element: <Allproduct />
     }
 ]);
 
