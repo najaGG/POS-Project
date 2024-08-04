@@ -12,6 +12,7 @@ import Owner from './pages/Owner';
 import TEST from './pages/TEST';
 import Edit from './pages/Edit';
 import EditAdmin from './pages/AdminEditlogin';
+import Dashboard from './pages/Dashboard';
 
 import{
     createBrowserRouter,
@@ -54,6 +55,10 @@ const router = createBrowserRouter([
     {
         path:"/EditAdmin",
         element: <EditAdmin/>
+    },
+    {
+        path:"/Dashboard",
+        element: <Dashboard />
     }
 ]);
 

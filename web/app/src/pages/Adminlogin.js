@@ -19,12 +19,13 @@ function Home() {
 
     const handleLogin = async () => {
         try {
-            if (input1Value === undefined || input2Value === undefined) {
+            if (input1Value === '' || input2Value === '') {
                 Swal.fire({
                     title: 'โปรดระบุข้อมูลให้ครบถ้วน',
                     icon: 'warning',
                     timer: 2000
                 });
+                console.log(input1Value,input2Value);
             }
             else {
                 const hash = hashSum(input2Value);
@@ -35,9 +36,9 @@ function Home() {
                 await axios.post(config.api_path + '/admin/login', payload).then(res => {
                     if (res.data.message === 'success') {
                         Swal.fire({
-                            title: 'โปรดจดจำรหัสผ่านของท่าน',
+                            title: 'ยินดีต้อนรับเข้าสู่ระบบ',
                             icon: 'success',
-                            text: 'เพื่อสิทธิประโยชน์ของท่านเอง',
+                            text: '',
                             showConfirmButton: true
                         });
                         localStorage.setItem(config.token_name, res.data.token);
@@ -50,7 +51,7 @@ function Home() {
         } catch (e) {
             Swal.fire({
                 title: "Error",
-                text: "พบข้อผิดพลาดโปรดตรวจสอบใหม่อีกครั้ง",
+                text: e.message,
                 icon: "error",
             })
         }

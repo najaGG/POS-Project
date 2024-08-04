@@ -1,3 +1,4 @@
+const { toDefaultValue } = require('sequelize/lib/utils');
 const conn = require('../connect');
 const { Sequelize, DataTypes } = require('sequelize');
 const ProductModel = conn.define('product',{
@@ -15,6 +16,10 @@ const ProductModel = conn.define('product',{
     stock:{
         type: DataTypes.STRING
     },
+    status:{
+        type: DataTypes.STRING,
+        defaultValue: 'active'
+    }
 })
 
 ProductModel.sync({alter:true});

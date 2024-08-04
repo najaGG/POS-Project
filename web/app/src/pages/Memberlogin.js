@@ -16,7 +16,7 @@ function Home() {
 
     const handleLogin = async () => {
         try {
-            if (input1Value === undefined && input2Value === null) {
+            if (input1Value === '' || input2Value === '') {
                 Swal.fire({
                     title: 'โปรดระบุข้อมูลให้ครบถ้วน',
                     icon: 'warning',
@@ -47,7 +47,7 @@ function Home() {
         } catch (e) {
             Swal.fire({
                 title: "Error",
-                text: "พบข้อผิดพลาดโปรดตรวจสอบใหม่อีกครั้ง",
+                text: e.message,
                 icon: "error",
             })
         }

@@ -13,7 +13,7 @@ function Sidebar() {
 
     const  fetchData = async () =>{
         try{
-            axios.get(config.api_path + '/member/info',configMember.headers()).then(res =>{
+            axios.get(config.api_path + '/admin/info',config.headers()).then(res =>{
                 if(res.data.message === 'success'){
                     setUserName(res.data.result.phone);
                 }
@@ -48,19 +48,19 @@ function Sidebar() {
                                 <ul className="nav nav-treeview">
                                 
                                     <li className="nav-item">
-                                        <a href="#" className="nav-link">
+                                        <Link to='/dashboard' className="nav-link">
                                             <i class="fa-solid fa-chart-line fa-xl ms-1"></i>
                                             <p className='ms-2' style={{fontSize:24}}>
                                                 Dashboard
                                             </p>
-                                        </a>
+                                        </Link>
                                     </li>
                                     <hr className="custom-hr"/>
                                     <li className="nav-item">
                                         <a href="#" className="nav-link">
                                         <i className="fa-solid fa-cart-plus fa-xl ms-1"></i>
                                             <p className='ms-3'style={{fontSize:24}}>
-                                                สินค้า
+                                                แก้ไขสินค้า
                                             </p>
                                         </a>
                                     </li>
@@ -69,7 +69,7 @@ function Sidebar() {
                                         <a href="#" className="nav-link">
                                         <i class="fa-solid fa-user-tie fa-xl ms-1"></i>
                                             <p className='ms-3' style={{fontSize:24}}>
-                                                Admin
+                                                Product
                                             </p>
                                         </a>
                                     </li>
