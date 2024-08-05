@@ -19,7 +19,7 @@ function EditAdmin() {
 
     const handleLogin = async () => {
         try {
-            if (input1Value === undefined || input2Value === undefined) {
+            if (input1Value === '' || input2Value === '') {
                 Swal.fire({
                     title: 'โปรดระบุข้อมูลให้ครบถ้วน',
                     icon: 'warning',
@@ -50,7 +50,7 @@ function EditAdmin() {
         } catch (e) {
             Swal.fire({
                 title: "Error",
-                text: "พบข้อผิดพลาดโปรดตรวจสอบใหม่อีกครั้ง",
+                text: e.message,
                 icon: "error",
             })
         }
@@ -112,8 +112,8 @@ function EditAdmin() {
                         </div>
                     </div>
                 </div>
-                <button className="btn btn-danger toptext" onClick={handleBack}>
-                        <i class="fa-solid fa-arrow-left" title="Back"></i>
+                <button className="btn toptext" onClick={handleBack}>
+                        <i class="fa-solid fa-xl fa-arrow-left" style={{color: "#ffffff"}} title="Back"></i>
                     </button>
             </div>
 

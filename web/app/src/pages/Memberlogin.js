@@ -16,7 +16,7 @@ function Home() {
 
     const handleLogin = async () => {
         try {
-            if (input1Value === undefined && input2Value === null) {
+            if (input1Value === '' || input2Value === '') {
                 Swal.fire({
                     title: 'โปรดระบุข้อมูลให้ครบถ้วน',
                     icon: 'warning',
@@ -47,7 +47,7 @@ function Home() {
         } catch (e) {
             Swal.fire({
                 title: "Error",
-                text: "พบข้อผิดพลาดโปรดตรวจสอบใหม่อีกครั้ง",
+                text: e.message,
                 icon: "error",
             })
         }
@@ -102,8 +102,8 @@ function Home() {
 
                 </div>
 
-                    <button className="btn btn-info toptext" onClick={handleLoginEdit}>
-                        <i class="fa-solid fa-user-tie" title="Admin only"></i>
+                    <button className="btn toptext"  onClick={handleLoginEdit}>
+                        <i class="fa-solid fa-xl fa-user-tie" style={{color: "#ffffff"}} title="Admin only"></i>
                     </button>
                 
 

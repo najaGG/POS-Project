@@ -18,33 +18,33 @@ app.get('/member/info',service.Islogin, async (req, res) => {
     }
 })
 
-app.post('/member/insert',service.Islogin, async (req, res) => {
-    try{
+app.post('/member/insert', service.Islogin, async (req, res) => {
+    try {
         const member = await MemberModel.findAll({
             where: {
                 phone: req.body.phone,
-                pws: req.body.pws,
             }
-        })
-        if (member.length === 0) {
+        });
+        if (member.length > 0) {
+            if (member[0].pws !== req.body.pws) {
+                res.statusCode = 401;
+                return res.send({ message: 'เบอร์โทรหรือรหัสผ่านไม่ถูกต้อง' });
+            } else {
+                let token = jwt.sign({ id: member[0].id }, process.env.secret);
+                return res.send({ token: token, message: 'success' });
+            }
+        } else {
             let payload = req.body;
             payload.AdminID = service.getAdminId(req);
             const newMember = await MemberModel.create(payload);
-            let token = jwt.sign({id: newMember.id}, process.env.secret)
-            res.send({ message: 'success',token: token});
-        } else {
-            if(member.length > 0) {
-                let token = jwt.sign({id: member[0].id}, process.env.secret)
-                return res.send({token: token, message: 'success'});
-            } else {
-                res.statusCode = 401;
-                return res.send({message: 'เบอร์โทรหรือรหัสผ่านไม่ถูกต้อง'});
-            }
+            let token = jwt.sign({ id: newMember.id }, process.env.secret);
+            return res.send({ message: 'success', token: token });
         }
-    }catch(e){
+    } catch (e) {
         res.statusCode = 500;
-        res.send({message: e.message});
+        res.send({ message: e.message });
     }
-})
+});
+
 
 module.exports = app;

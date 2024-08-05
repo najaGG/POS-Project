@@ -15,7 +15,7 @@ function Home() {
 
     const handleLogin = async () => {
         try {
-            if (input1Value === undefined || input2Value === undefined) {
+            if (input1Value === '' || input2Value === '') {
                 Swal.fire({
                     title: 'โปรดระบุข้อมูลให้ครบถ้วน',
                     icon: 'warning',
