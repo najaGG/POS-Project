@@ -112,8 +112,8 @@ function EditAdmin() {
                         </div>
                     </div>
                 </div>
-                <button className="btn btn-danger toptext" onClick={handleBack}>
-                        <i class="fa-solid fa-arrow-left" title="Back"></i>
+                <button className="btn toptext" onClick={handleBack}>
+                        <i class="fa-solid fa-xl fa-arrow-left" style={{color: "#ffffff"}} title="Back"></i>
                     </button>
             </div>
 

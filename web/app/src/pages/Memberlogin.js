@@ -102,8 +102,8 @@ function Home() {
 
                 </div>
 
-                    <button className="btn btn-info toptext" onClick={handleLoginEdit}>
-                        <i class="fa-solid fa-user-tie" title="Admin only"></i>
+                    <button className="btn toptext"  onClick={handleLoginEdit}>
+                        <i class="fa-solid fa-xl fa-user-tie" style={{color: "#ffffff"}} title="Admin only"></i>
                     </button>
                 
 
