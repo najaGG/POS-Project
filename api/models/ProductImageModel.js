@@ -13,7 +13,8 @@ const ProductImage = conn.define('productimage',{
         type: DataTypes.STRING
     },
     Ismain:{
-        type: DataTypes.BOOLEAN
+        type: DataTypes.BOOLEAN,
+        defaultvalue: false
     }
 })
 
