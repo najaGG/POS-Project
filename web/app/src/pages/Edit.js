@@ -1,51 +1,47 @@
 import Template from "../components/TemplateAdmin";
 
-function Editproduct() {
+function EditProduct() {
     return (
         <>
             <Template>
                 <div className="row">
-                    <p className="text-start">แก้ไข / เพิ่มเติมสินค้า</p>
-                    <div className="col-4">
-                        <div className="input-group input-group-lg mb-3 ">
-                            <span className="input-group-text" id="inputGroup-sizing-lg">ชื่อสินค้า</span>
-                            <input type="text" className="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-lg" />
-                            <label htmlFor="inputPassword2"></label>
-                        </div>
-                    </div>                        
-                    
+                    <label htmlFor="productName" className="form-label">เพิ่มเติมสินค้า</label>
                     <div className="col-4">
                         <div className="input-group input-group-lg mb-3">
-                            <span className="input-group-text" id="inputGroup-sizing-lg">จำนวน</span>
-                            <input type="text" className="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-lg" />
-                            <label htmlFor="inputPassword2"></label>
+                            <span className="input-group-text" id="productName">ชื่อสินค้า</span>
+                            <input type="text" className="form-control" id="productName" aria-label="Sizing example input" aria-describedby="productName" />
                         </div>
                     </div>
+
                     <div className="col-4">
                         <div className="input-group input-group-lg mb-3">
-                            <span className="input-group-text" id="inputGroup-sizing-lg">การใช้งานสินค้า</span>
-                            <input type="text" className="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-lg" />
-                            <label htmlFor="inputPassword2"></label>
+                            <span className="input-group-text" id="quantity">จำนวน</span>
+                            <input type="text" className="form-control" id="quantity" aria-label="Sizing example input" aria-describedby="quantity" />
                         </div>
                     </div>
-                    <div> 
-                        <label for="formFileLg" class="form-label">เลือกภาพสินค้า</label>
-                        <input class="form-control form-control-lg" id="formFileLg" type="file" />
+
+                    <div className="col-4">
+                        <div className="input-group input-group-lg mb-3">
+                            <span className="input-group-text" id="usage">การใช้งานสินค้า</span>
+                            <input type="text" className="form-control" id="usage" aria-label="Sizing example input" aria-describedby="usage" />
+                        </div>
                     </div>
+
+                    <div>
+                        <label htmlFor="productImage" className="form-label">เลือกภาพสินค้า</label>
+                        <input className="form-control form-control-lg" id="productImage" type="file" />
+                    </div>
+
                 </div>
 
-                
-                <form className="row g-3">
-                    <div className="col-auto">
-                        <button type="submit" className="btn btn-primary mb-3">Confirm identity</button>
-                    </div>
-                </form>
+                <div className="mt-2 text-center">
+                    <button type="submit" className="btn btn-primary mb-3">บันทึก</button>
+                </div>
+
             </Template>
         </>
     );
 }
 
-export default Editproduct;
-
-
+export default EditProduct;
 
