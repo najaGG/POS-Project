@@ -76,6 +76,7 @@ function Editproduct() {
                                 onChange={e => setProduct({ ...product, stock: e.target.value })} />
                         </div>
                     </div>
+
                     <div className="col-4">
                         <div className="input-group input-group-lg mb-3">
                             <span className="input-group-text" id="inputGroup-sizing-lg">ราคาต่อชิ้น</span>
@@ -96,6 +97,16 @@ function Editproduct() {
                         <label for="formFileLg" class="form-label">เลือกภาพสินค้า</label>
                         <input class="form-control form-control-lg" id="formFileLg" type="file" />
                     </div>
+
+                    <div>
+                        <label htmlFor="productImage" className="form-label">เลือกภาพสินค้า</label>
+                        <input className="form-control form-control-lg" id="productImage" type="file" />
+                    </div>
+
+                </div>
+
+                <div className="mt-2 text-center">
+                    <button type="submit" className="btn btn-primary mb-3">บันทึก</button>
                 </div>
                 <form className="row g-3">
                     <div className="col-auto">
@@ -103,12 +114,11 @@ function Editproduct() {
                             Confirm identity</button>
                     </div>
                 </form>
+
             </Template>
         </>
     );
 }
 
-export default Editproduct;
-
-
+export default EditProduct;
 
