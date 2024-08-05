@@ -10,7 +10,7 @@ import Adminlogin from './pages/Adminlogin';
 import Memberlogin from './pages/Memberlogin';
 import Owner from './pages/Owner';
 import TEST from './pages/TEST';
-import Edit from './pages/Edit';
+import Editproduct from './pages/Edit';
 import EditAdmin from './pages/AdminEditlogin';
 import Dashboard from './pages/Dashboard';
 import Allproduct from './pages/Admin All product';
@@ -51,7 +51,7 @@ const router = createBrowserRouter([
     },
     {
         path:"/Editproduct",
-        element: <Edit />
+        element: <Editproduct />
     },
     {
         path:"/EditAdmin",
