@@ -93,27 +93,13 @@ function Editproduct() {
                                 onChange={e => setProduct({ ...product, detail: e.target.value })} />
                         </div>
                     </div>
-                    <div>
-                        <label for="formFileLg" class="form-label">เลือกภาพสินค้า</label>
-                        <input class="form-control form-control-lg" id="formFileLg" type="file" />
-                    </div>
-
-                    <div>
-                        <label htmlFor="productImage" className="form-label">เลือกภาพสินค้า</label>
-                        <input className="form-control form-control-lg" id="productImage" type="file" />
-                    </div>
-
+                
                 </div>
 
                 <div className="mt-2 text-center">
                     <button type="submit" className="btn btn-primary mb-3">บันทึก</button>
                 </div>
-                <form className="row g-3">
-                    <div className="col-auto">
-                        <button type="submit" className="btn btn-primary mb-3" onClick={handlesave}>
-                            Confirm identity</button>
-                    </div>
-                </form>
+\
 
             </Template>
         </>
