@@ -8,7 +8,7 @@ import { Link } from "react-router-dom";
 function Sidebar() {
     const[userName, setUserName] = useState();
     useEffect(() => {
-        fetchData();
+        {/*fetchData();*/}
     },[])
 
     const  fetchData = async () =>{
