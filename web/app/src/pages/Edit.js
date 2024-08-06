@@ -7,18 +7,15 @@ import { useNavigate } from "react-router-dom";
 
 function Editproduct() {
     const [product, setProduct] = useState({})
-
+    const [productImage, setProductImage] = useState({});
     const handlesave = async (e) => {
         e.preventDefault();
         try {
             await axios.post(config.api_path + "/product/insert", product, config.headers()).then(res => {
                 if (res.data.message === "success") {
-                    Swal.fire({
-                        title: 'บันทึกข้อมูล',
-                        text: 'บันทึกข้อมูลสำเร็จ',
-                        icon: 'success',
-                        timer: 2000
-                    })
+                    const productid = res.data.result.id
+                    handlesavePic(productid)
+                   
                 }
             });
         } catch (e) {
@@ -29,28 +26,39 @@ function Editproduct() {
                 timer: 2000
             })
         }
-
     }
-    const handlesavePic = () => {
-        Swal.fire({
-            title: 'ยืนยันการเพิ่มรูป',
-            text: 'โปรดยืนยันเพื่ออัพโหลด',
-            icon: 'question',
-            showCancelButton: true,
-            showConfirmButton: true
-        }).then(async res => {
-            try {
-                const _config = {
-                    headers: {
-                        'Authorization': 'Bearer ' + localStorage.getItem(config.token_name),
-                        'Content-Type': 'mulipart/form-data'
-                    }
+    const handlesavePic = async (productid) => {
+        try {
+            const _config = {
+                headers: {
+                    'Authorization': 'Bearer ' + localStorage.getItem(config.token_name),
+                    'Content-Type': 'mulipart/form-data'
                 }
-
-            } catch (e) {
-
             }
-        })
+            const formdata = new FormData();
+            formdata.append('productImage', productImage);
+            formdata.append('productImagename', productImage.name);
+            formdata.append('productID' , productid);
+            await axios.post(config.api_path + '/picture/insert', formdata, _config).then(res => {
+                Swal.fire({
+                    title: 'บันทึกข้อมูล',
+                    text: 'บันทึกข้อมูลสำเร็จ',
+                    icon: 'success',
+                    timer: 2000
+                })
+            })
+        } catch (e) {
+            Swal.fire({
+                title: "Error",
+                text: e.message,
+                icon: "error",
+                timer: 2000
+            })
+        }
+    }
+
+    const handleChange = (files) => {
+        setProductImage(files[0]);
     }
 
     return (
@@ -95,13 +103,15 @@ function Editproduct() {
                     </div>
                     <div>
                         <label htmlFor="productImage" className="form-label">เลือกภาพสินค้า</label>
-                        <input className="form-control form-control-lg" id="productImage" type="file" />
+                        <input className="form-control form-control-lg" id="productImage" type="file" onChange={e => handleChange(e.target.files)} />
                     </div>
                 </div>
 
                 <div className="mt-2 text-center">
                     <button type="submit" className="btn btn-primary mb-3" onClick={handlesave}>บันทึก</button>
                 </div>
+
+                
             </Template>
         </>
     );
