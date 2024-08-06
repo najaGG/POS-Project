@@ -14,7 +14,6 @@ const ProductImage = conn.define('productimage',{
     },
     Ismain:{
         type: DataTypes.BOOLEAN,
-        defaultvalue: false
     }
 })
 
