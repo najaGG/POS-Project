@@ -15,7 +15,8 @@ const ProductImageControll = require('./controllers/ProductImageControll');
 const BuyproductControll = require('./controllers/BuyproductControll');
 const DashboardControll = require('./controllers/DashboardControll');
 const OwnerControll = require('./controllers/OwnerControll');
-
+const BillsaleControll = require('./controllers/BillsaleControll');
+app.use('/uploads',express.static('uploads'))
 app.use(DashboardControll);
 app.use(BuyproductControll);
 app.use(ProductImageControll);
@@ -23,32 +24,9 @@ app.use(MemberControll);
 app.use(ProductControll);
 app.use(AdminControll);
 app.use(OwnerControll);
-
-const socketIo = require('socket.io');
-const http = require('http');
-const server = http.createServer(app);
-const io = socketIo(server, {
-    cors: {
-        origin: "http://localhost:3000",
-        methods: ["GET", "POST"]
-    }
-});
-
-io.on('connection', (socket) => {
-    console.log('New client connected');
-
-    socket.on('sendMessage', (message) => {
-        console.log(message);
-    });
-
-    socket.on('disconnect', () => {
-        console.log('Client disconnected');
-    });
-});
+app.use(BillsaleControll);
 
 
-
-
-server.listen(port,() =>{
+app.listen(port,() =>{
     console.log('listening on port ', port);
 })

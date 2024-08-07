@@ -5,15 +5,11 @@ import { useState } from "react";
 import './reg.css'
 import { useNavigate } from "react-router-dom";
 import hashSum from 'hash-sum';
-import io from 'socket.io-client';
-const socket = io('http://localhost:3555');
 
 function EditAdmin() {
     const [input1Value, setInput1Value] = useState('');
     const [input2Value, setInput2Value] = useState('');
     const [selectedInput, setSelectedInput] = useState(null);
-    const [message, setMessage] = useState('');
-    const [chat, setChat] = useState([]);
 
     const navigate = useNavigate();
 
@@ -70,10 +66,6 @@ function EditAdmin() {
         }
     }
 
-    const sendMessage = () => {
-        socket.emit('sendMessage', message);
-        setMessage('');
-    };
 
     const handleBack = () =>{
         navigate('/memberlogin')
