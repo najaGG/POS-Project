@@ -19,10 +19,6 @@ const ProductModel = conn.define('product',{
     detail:{
         type: DataTypes.STRING
     },
-    status:{
-        type: DataTypes.STRING,
-        defaultValue: 'active'
-    },
     adminID:{
         type: DataTypes.BIGINT,
     }

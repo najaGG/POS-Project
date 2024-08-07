@@ -12,7 +12,7 @@ function Modal(props) {
                     <div className="modal-content">
                         <div className="modal-header">
                             <h1 className="modal-title fs-5" id="staticBackdropLabel">{props.title}</h1>
-                            
+                            <button id="btnModalClose" type="button" className="btn-close btn-Close" data-dismiss="modal" aria-label="Close"></button>
                         </div>
                         <div className="modal-body">
                             {props.children}

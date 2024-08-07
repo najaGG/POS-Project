@@ -6,7 +6,7 @@ const BuyproductModel = conn.define('buyproduct', {
         primaryKey: true,
         autoIncrement: true
     },
-    memberID: {
+    adminID: {
         type: DataTypes.BIGINT
     },
     productID: {
@@ -18,11 +18,7 @@ const BuyproductModel = conn.define('buyproduct', {
     price: {
         type: DataTypes.BIGINT
     },
-    status: {
-        type: DataTypes.STRING,
-        defaultValue: 'open',
-        allowNull: false
-    }
+    
 })
 
 BuyproductModel.sync({ alter: true });

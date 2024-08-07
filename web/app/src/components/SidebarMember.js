@@ -8,7 +8,7 @@ import { Link } from "react-router-dom";
 function Sidebar() {
     const[userName, setUserName] = useState();
     useEffect(() => {
-        {/*fetchData();*/}
+        fetchData();
     },[])
 
     const  fetchData = async () =>{
@@ -47,7 +47,7 @@ function Sidebar() {
                             <li className="nav-item menu-open"> 
                                 <ul className="nav nav-treeview">
                                     <li className="nav-item">
-                                        <Link to="/Allproduct" className="nav-link">
+                                        <Link to="/product" className="nav-link">
                                             <i className="fa-solid fa-cart-plus fa-xl ms-1"></i>
                                             <p className='ms-3'style={{fontSize:24}}>
                                                 สินค้า

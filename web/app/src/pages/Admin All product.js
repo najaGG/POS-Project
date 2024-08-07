@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import Template from "../components/Template";
+import TemplateAdmin from "../components/TemplateAdmin";
 
 function Allproduct() {
     const [expanded, setExpanded] = useState({});
@@ -54,7 +54,7 @@ function Allproduct() {
 
     return (
         <>
-            <Template>
+            <TemplateAdmin>
                 <div className="row row-cols-1 row-cols-md-3 g-4">
                     {products.map((item, index) => (
                         <div className="col" key={index} style={{ display: 'flex', flexDirection: 'column' }}>
@@ -113,7 +113,7 @@ function Allproduct() {
                         </div>
                     ))}
                 </div>
-            </Template>
+            </TemplateAdmin>
         </>
     );
 }
