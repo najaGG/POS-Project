@@ -409,9 +409,10 @@ function Editproduct() {
                     </div>
                     <div className="mt-3 text-center">
                         <button onClick={saveImg} className="btn btn-outline-success">
-                            <i class="fa-solid fa-cart-arrow-down mr-2"></i>
+                            <i class="fa-solid fa-download fa-lg mr-2"></i>
                             บันทึก
                         </button>
+
                     </div>
                     <hr className="my-4" />
                     <div className="mt-3 h5">ภาพสินค้า</div>

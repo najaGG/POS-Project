@@ -60,4 +60,31 @@ app.post('/product/update',service.Islogin , async (req,res) =>{
     }
 })
 
+app.get('/product/listsale' , service.Islogin , async (req,res) =>{
+    const ProductImageModel = require('../models/ProductImageModel');
+    ProductModel.hasMany(ProductImageModel, { foreignKey: 'productID' });
+    ProductImageModel.belongsTo(ProductModel, { foreignKey: 'productID' })
+
+    try{
+        const result = await ProductModel.findAll({
+            where:{
+                adminID: service.getAdminId(req)
+            },
+            include:{
+                model: ProductImageModel,
+                where:{
+                    Ismain : true
+                }
+            },
+            order: [['id','DESC']]
+        })
+        res.send({result: result, message: 'success'});
+    }catch(e){
+        res.statusCode = 500;
+        res.send({message: e.message});
+    }
+})
+
+
+
 module.exports = app;
