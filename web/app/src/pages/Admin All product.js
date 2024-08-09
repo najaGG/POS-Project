@@ -62,7 +62,7 @@ function Allproduct() {
                                     <div style={{ marginTop: '20px', width: '100%', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                                         <p><strong>ราคา : {parseInt(item.price).toLocaleString('th-TH')} บาท</strong></p>
                                         <div style={{ display: 'flex', alignItems: 'center' }}>
-                                            <button
+                                            <button 
                                                 className="btn btn-secondary"
                                                 style={{ marginRight: '5px', padding: '5px 10px' }}
                                             >
