@@ -12,8 +12,7 @@ function Home() {
     const [input1Value, setInput1Value] = useState('');
     const [input2Value, setInput2Value] = useState('');
     const [selectedInput, setSelectedInput] = useState(null);
-    const [message, setMessage] = useState('');
-    const [chat, setChat] = useState([]);
+
 
     const navigate = useNavigate();
 
@@ -71,10 +70,6 @@ function Home() {
         }
     }
 
-    const sendMessage = () => {
-        socket.emit('sendMessage', message);
-        setMessage('');
-    };
     return (
         <>
         

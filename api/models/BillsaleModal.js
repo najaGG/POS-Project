@@ -6,7 +6,7 @@ const BillsaleModal = conn.define('billsale', {
         primaryKey: true,
         autoIncrement: true
     },
-    memberID: {
+    adminID: {
         type: DataTypes.BIGINT
     },
     status :{

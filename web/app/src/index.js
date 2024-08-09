@@ -9,7 +9,6 @@ import Product from './pages/product';
 import Adminlogin from './pages/Adminlogin';
 import Memberlogin from './pages/Memberlogin';
 import Owner from './pages/Owner';
-import TEST from './pages/TEST';
 import Editproduct from './pages/Edit';
 import EditAdmin from './pages/AdminEditlogin';
 import Dashboard from './pages/Dashboard';
@@ -45,10 +44,7 @@ const router = createBrowserRouter([
         path:"/ownerLogin",
         element: <Owner  />
     },
-    {
-        path:"/TEST",
-        element: <TEST  />
-    },
+
     {
         path:"/Editproduct",
         element: <Editproduct />

@@ -18,7 +18,9 @@ const BuyproductModel = conn.define('buyproduct', {
     price: {
         type: DataTypes.BIGINT
     },
-    
+    billSaleId:{
+        type: DataTypes.BIGINT,
+    },
 })
 
 BuyproductModel.sync({ alter: true });
