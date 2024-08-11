@@ -11,9 +11,7 @@ while count < coin:
     value = device.value
     if value == 1:
         count += 10
-        print(1)  
+        print(1)  # พิมพ์ค่า 1 ทุกครั้งที่ค่าของ `value` เป็น 1
     else:
-        print(0)  
-    sleep(0.5)  
-
-
+        print(0)
+    sleep(0.5)

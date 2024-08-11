@@ -17,7 +17,7 @@ const DashboardControll = require('./controllers/DashboardControll');
 const OwnerControll = require('./controllers/OwnerControll');
 const BillsaleControll = require('./controllers/BillsaleControll');
 
-app.use('/uploads',express.static('uploads'))
+app.use('/uploads', express.static('uploads'))
 app.use(DashboardControll);
 app.use(BuyproductControll);
 app.use(ProductImageControll);
@@ -34,23 +34,35 @@ app.post('/api/call', (req, res) => {
     if (totalPrice === undefined) {
         return res.status(400).json({ error: 'Missing coin parameter' });
     }
+
     const pythonProcess = spawn('python', ['coin.py', totalPrice]);
     let count = 0;
+    let outputData = '';
+
     pythonProcess.stdout.on('data', (data) => {
-        const output = data.toString().trim();
-        if (output === '1') {
-            count += 10;
-        }
+        outputData += data.toString();  // รวบรวมข้อมูลทั้งหมด
     });
+
     pythonProcess.stderr.on('data', (data) => {
         console.error(`Error: ${data}`);
     });
+
     pythonProcess.on('close', (code) => {
+        // ตรวจสอบข้อมูลทั้งหมดที่รวบรวมได้
+        console.log(`Complete Python output: ${outputData}`);
+        
+        // แปลงข้อมูลออกเป็นบรรทัด
+        const outputs = outputData.split('\n');
+        outputs.forEach(line => {
+            if (line.trim() === '1') {
+                count += 10;  // เพิ่มค่า count ทุกครั้งที่เจอ '1'
+            }
+        });
+
         res.json({ count, code });
     });
 });
 
-
-app.listen(port,() =>{
+app.listen(port, () => {
     console.log('listening on port ', port);
 })
