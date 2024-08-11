@@ -18,7 +18,6 @@ export const CheckCoin = ({ coins }) => {
                 try {
                     const response = await axios.get('http://localhost:5000/status');
                     const { status } = response.data;
-
                     if (status === 1) {
                         setCount((prevCount) => {
                             const newCount = prevCount + 10;
@@ -38,11 +37,11 @@ export const CheckCoin = ({ coins }) => {
             intervalId = setInterval(fetchStatus, 500);
         }
 
-        return () => clearInterval(intervalId); // Cleanup interval on component unmount
-    }, [isChecking, coin]); // เรียกใช้ useEffect เมื่อ isChecking หรือ coin เปลี่ยน
+        return () => clearInterval(intervalId); 
+    }, [isChecking, coin]); 
 
     useEffect(() => {
-        // เรียกใช้ startChecking ทันทีเมื่อคอมโพเนนต์ถูกโหลด
+        
         const startChecking = () => {
             setCount(0); // รีเซ็ตค่า count
             setIsChecking(true);

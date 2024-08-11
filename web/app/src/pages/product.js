@@ -5,7 +5,6 @@ import axios from "axios";
 import config from "../config";
 import Swal from "sweetalert2";
 import './Allproduct.css'
-import { CheckCoin } from './่javascript/Coincallpython';
 
 function Allproduct() {
 
@@ -15,22 +14,11 @@ function Allproduct() {
     const [currentBill, setCurrentBill] = useState({})
     const [totalPrice, setTotalPrice] = useState(0);
     const [coins, setCoins] = useState(100); // ค่า totalPrice ที่ต้องการส่งไป
-    const [showModal, setShowModal] = useState(false);
     useEffect(() => {
         fatchData()
         openBill()
         fatchBill()
     }, [])
-
-    const handleConfirmOrder = () => {
-        // เปิด modal
-        setShowModal(true);
-    };
-
-    const handleCloseModal = () => {
-        // ปิด modal
-        setShowModal(false);
-    };
 
     const openBill = async () => {
         try {
@@ -114,6 +102,18 @@ function Allproduct() {
         }
     }
 
+    const call = async (totalPrice) => {
+        try {
+            console.log(totalPrice)
+            const response = await axios.post(config.api_path +'/api/call',  { totalPrice });
+            const { count, code } = response.data;
+
+            console.log(`Count: ${count}`);
+            console.log(`Python process exited with code ${code}`);
+        } catch (error) {
+            console.error('Error:', error);
+        }
+    };
 
     return (
         <>
@@ -203,39 +203,36 @@ function Allproduct() {
                         </div>
                     ) : ''}
                 <div className="d-flex justify-content-center">
-                    <button
+                    <button data-toggle='modal' data-target="#modalEnd"
                         className="btn btn-success mt-3"
-                        onClick={() => handleConfirmOrder()}
+                        onClick={e => call(totalPrice)}
                     >
                         ยืนยันการสั่งซื้อ
                     </button>
                 </div>
             </Modal>
-            {showModal && (
-                <div className="modal fade show" style={{ display: 'block' }} role="dialog">
-                    <div className="modal-dialog modal-dialog-centered" role="document">
-                        <div className="modal-content">
-                            <div className="modal-header">
-                                <h5 className="modal-title">รอการชำระเงิน</h5>
-                                <button
-                                    type="button"
-                                    className="close"
-                                    onClick={handleCloseModal}
-                                >
-                                    <span aria-hidden="true">&times;</span>
-                                </button>
-                            </div>
-                            <div className="d-flex justify-content-center ">
-                                <div className="loader mt-2"></div>
-                            </div>
 
-                            <div className="modal-body center">
-                                <CheckCoin coins={totalPrice} /> 
+            <div class="modal fade" id="modalEnd" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+                <div class="modal-dialog modal-dialog-centered" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="exampleModalLongTitle">รอการชำระเงิน</h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <div class="modal-body">
+                            <div className="d-flex justify-content-center my-1">
+                                <div className="loader"></div>
+                            </div>
+                            <div className="d-flex justify-content-center mt-3">
+                                <p>จำนวนเงินปัจจุบัน : </p>
                             </div>
                         </div>
                     </div>
                 </div>
-            )}
+            </div>
+
 
         </>
     );
