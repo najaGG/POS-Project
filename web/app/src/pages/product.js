@@ -5,7 +5,7 @@ import axios from "axios";
 import config from "../config";
 import Swal from "sweetalert2";
 import './Allproduct.css'
-import { CheckCoin } from './่javascript/Coincallpython';
+import configMember from "../configMember"
 
 function Allproduct() {
 
@@ -14,23 +14,14 @@ function Allproduct() {
     const [Itemqty, setItemQty] = useState(0);
     const [currentBill, setCurrentBill] = useState({})
     const [totalPrice, setTotalPrice] = useState(0);
-    const [coins, setCoins] = useState(100); // ค่า totalPrice ที่ต้องการส่งไป
-    const [showModal, setShowModal] = useState(false);
+    const [coins, setCoins] = useState(0)
+    const [userName, setUserName] = useState();
+    const [monney , setMonney] = useState(300);
     useEffect(() => {
         fatchData()
         openBill()
         fatchBill()
     }, [])
-
-    const handleConfirmOrder = () => {
-        // เปิด modal
-        setShowModal(true);
-    };
-
-    const handleCloseModal = () => {
-        // ปิด modal
-        setShowModal(false);
-    };
 
     const openBill = async () => {
         try {
@@ -38,6 +29,8 @@ function Allproduct() {
                 if (res.data.message === 'success') {
                     setBillSale(res.data.result);
                 }
+            }).catch(err => {
+                throw err.response.data
             })
         } catch (e) {
             Swal.fire({
@@ -55,6 +48,8 @@ function Allproduct() {
                 if (res.data.message === 'success') {
                     setProducts(res.data.result);
                 }
+            }).catch(err => {
+                throw err.response.data
             })
         } catch (e) {
             Swal.fire({
@@ -73,6 +68,8 @@ function Allproduct() {
                     setCurrentBill(res.data.result);
                     sumtotalprice(res.data.result.buyproducts);
                 }
+            }).catch(err => {
+                throw err.response.data
             })
         } catch (e) {
             Swal.fire({
@@ -94,7 +91,7 @@ function Allproduct() {
         }
         setTotalPrice(sum);
     }
-
+    
     const buyproduct = async (item, action) => {
         try {
             item.action = action;
@@ -103,7 +100,9 @@ function Allproduct() {
                     item.qty = res.data.qty;
                     setItemQty(item.qty)
                 }
-            });
+            }).catch(err => {
+                throw err.response.data
+            })
         } catch (e) {
             Swal.fire({
                 title: "Error",
@@ -113,7 +112,77 @@ function Allproduct() {
             });
         }
     }
+    const newcoins = async () => {
+        try{
+            const payload ={
+                coin : monney
+            }
+            await axios.post(config.api_path + '/member/coins', payload ,configMember.headers()).then(res =>{
+                
+                if (res.data.message === "success") {
+                    Swal.fire({
+                        title: 'บันทึกข้อมูล',
+                        text: 'บันทึกข้อมูลสำเร็จ',
+                        icon: 'success',
+                        timer: 2000
+                    })
+                    fetchmember()
+                    close()
+                }
+            }).catch(err => {
+                throw err.response.data
+            })
+        }catch (e) {
+            Swal.fire({
+                title: "Error",
+                text: e.message,
+                icon: "error",
+                timer: 2000
+            });
+        }
+    }
 
+    const close = () => {
+        const closebtn = document.getElementsByClassName('btn-Close');
+        for (let i = 0; i < closebtn.length; i++) {
+            closebtn[i].click();
+        }
+    }
+
+    const fetchmember = async () => {
+        try {
+            axios.get(config.api_path + '/member/info', configMember.headers()).then(res => {
+                if (res.data.message === 'success') {
+                    setUserName(res.data.result.phone);
+                    
+                }
+            }).catch(err => {
+                throw err.response.data;
+            })
+        } catch (e) {
+            Swal.fire({
+                titel: "Error",
+                icon: "error",
+                text: e.message
+            })
+        }
+    }
+
+    const call = async (totalPrice) => {
+        
+        try {
+            console.log(totalPrice);
+            const response = await axios.post(config.api_path + '/api/call', { totalPrice });
+            const { count, code } = response.data;
+            setCoins(response.data.count)
+            newcoins();
+            console.log(`Count: ${count}`);
+            console.log(`Python process exited with code ${code}`);
+        } catch (error) {
+            console.error('Error:', error);
+        }
+    };
+    
 
     return (
         <>
@@ -203,39 +272,37 @@ function Allproduct() {
                         </div>
                     ) : ''}
                 <div className="d-flex justify-content-center">
-                    <button
+                    <button data-toggle='modal' data-target="#modalEnd"
                         className="btn btn-success mt-3"
-                        onClick={() => handleConfirmOrder()}
+                        onClick={e => call(totalPrice)}
                     >
                         ยืนยันการสั่งซื้อ
                     </button>
+                    <button className="btn btn-primary mt-3 ms-3" onClick={e => newcoins()}>test</button>
                 </div>
             </Modal>
-            {showModal && (
-                <div className="modal fade show" style={{ display: 'block' }} role="dialog">
-                    <div className="modal-dialog modal-dialog-centered" role="document">
-                        <div className="modal-content">
-                            <div className="modal-header">
-                                <h5 className="modal-title">รอการชำระเงิน</h5>
-                                <button
-                                    type="button"
-                                    className="close"
-                                    onClick={handleCloseModal}
-                                >
-                                    <span aria-hidden="true">&times;</span>
-                                </button>
-                            </div>
-                            <div className="d-flex justify-content-center ">
-                                <div className="loader mt-2"></div>
-                            </div>
 
-                            <div className="modal-body center">
-                                <CheckCoin coins={totalPrice} /> 
+            <div class="modal fade" id="modalEnd" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+                <div class="modal-dialog modal-dialog-centered" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="exampleModalLongTitle">รอการชำระเงิน</h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <div class="modal-body">
+                            <div className="d-flex justify-content-center my-1">
+                                <div className="loader"></div>
+                            </div>
+                            <div className="d-flex justify-content-center mt-3">
+                                <p>จำนวนเงินปัจจุบัน : {coins}</p>
                             </div>
                         </div>
                     </div>
                 </div>
-            )}
+            </div>
+
 
         </>
     );

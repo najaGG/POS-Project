@@ -4,18 +4,35 @@ const MemberModel = require('../models/MemberModel');
 const jwt = require('jsonwebtoken');
 const service = require('./service');
 
-app.get('/member/info',service.Islogin, async (req, res) => {
-    try{
+app.get('/member/info', service.Islogin, async (req, res) => {
+    try {
         const token = service.getToken(req);
         const payload = jwt.decode(token);
-        const member = await MemberModel.findByPk(payload.id,{
-            attributes: ['id','phone']
+        const member = await MemberModel.findByPk(payload.id, {
+            attributes: ['id', 'phone', 'coin']
         });
-        res.send({result:member , message: 'success'});
-    }catch(e){
+        res.send({ result: member, message: 'success' });
+    } catch (e) {
         res.statusCode = 500;
-        return res.send({message: e.message});
+        return res.send({ message: e.message });
     }
+})
+
+app.post('/member/coins', async (req, res) => {
+    try {
+        let payload = req.body
+        payload.id = service.getAdminId(req);
+        const result = await MemberModel.update(payload, {
+            where: {
+                id: payload.id
+            }
+        });
+        res.send({ payload: payload});
+    } catch (e) {
+        res.statusCode = 500;
+        res.send({message: e.message});
+    }
+
 })
 
 app.post('/member/insert', service.Islogin, async (req, res) => {
