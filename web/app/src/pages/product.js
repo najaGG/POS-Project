@@ -5,6 +5,7 @@ import axios from "axios";
 import config from "../config";
 import Swal from "sweetalert2";
 import './Allproduct.css'
+import { CheckCoin } from './่javascript/Coincallpython';
 
 function Allproduct() {
 
@@ -13,11 +14,23 @@ function Allproduct() {
     const [Itemqty, setItemQty] = useState(0);
     const [currentBill, setCurrentBill] = useState({})
     const [totalPrice, setTotalPrice] = useState(0);
+    const [coins, setCoins] = useState(100); // ค่า totalPrice ที่ต้องการส่งไป
+    const [showModal, setShowModal] = useState(false);
     useEffect(() => {
         fatchData()
         openBill()
         fatchBill()
     }, [])
+
+    const handleConfirmOrder = () => {
+        // เปิด modal
+        setShowModal(true);
+    };
+
+    const handleCloseModal = () => {
+        // ปิด modal
+        setShowModal(false);
+    };
 
     const openBill = async () => {
         try {
@@ -100,7 +113,6 @@ function Allproduct() {
             });
         }
     }
-
 
 
     return (
@@ -190,10 +202,41 @@ function Allproduct() {
                             </div>
                         </div>
                     ) : ''}
-                <div className="d-flex justify-content-center ">
-                    <button className="btn btn-success mt-3"> ยืนยันการสั่งซื้อ</button>
+                <div className="d-flex justify-content-center">
+                    <button
+                        className="btn btn-success mt-3"
+                        onClick={() => handleConfirmOrder()}
+                    >
+                        ยืนยันการสั่งซื้อ
+                    </button>
                 </div>
             </Modal>
+            {showModal && (
+                <div className="modal fade show" style={{ display: 'block' }} role="dialog">
+                    <div className="modal-dialog modal-dialog-centered" role="document">
+                        <div className="modal-content">
+                            <div className="modal-header">
+                                <h5 className="modal-title">รอการชำระเงิน</h5>
+                                <button
+                                    type="button"
+                                    className="close"
+                                    onClick={handleCloseModal}
+                                >
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                            <div className="d-flex justify-content-center ">
+                                <div className="loader mt-2"></div>
+                            </div>
+
+                            <div className="modal-body center">
+                                <CheckCoin coins={totalPrice} /> 
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            )}
+
         </>
     );
 }
