@@ -59,7 +59,7 @@ app.post('/api/call', (req, res) => {
             }
         });
 
-        res.json({ count, code });
+        res.send({ count: count , message:'success' });
     });
 });
 

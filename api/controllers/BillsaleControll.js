@@ -111,6 +111,23 @@ app.get('/Bill/currentInfo', service.Islogin, async (req, res) =>{
     }
 })
 
+app.get ('/bill/end',service.Islogin,async (req, res) => {
+    try{
+        await BillsaleModal.update({
+            status: 'pay',
+        },{
+            where: {
+                status: 'open',
+                adminID: service.getAdminId(req)
+            }
+        })
+        res.send({message: 'success'})
+    }catch(e){
+        res.statusCode =500
+        res.send({message:e.message})
+    }
+})
+
 
 module.exports = app;
 

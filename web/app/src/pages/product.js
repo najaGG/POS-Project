@@ -14,9 +14,8 @@ function Allproduct() {
     const [Itemqty, setItemQty] = useState(0);
     const [currentBill, setCurrentBill] = useState({})
     const [totalPrice, setTotalPrice] = useState(0);
-    const [coins, setCoins] = useState(0)
+    const [coins, setCoins] = useState(100)
     const [userName, setUserName] = useState();
-    const [monney , setMonney] = useState(300);
     useEffect(() => {
         fatchData()
         openBill()
@@ -91,7 +90,7 @@ function Allproduct() {
         }
         setTotalPrice(sum);
     }
-    
+
     const buyproduct = async (item, action) => {
         try {
             item.action = action;
@@ -112,27 +111,47 @@ function Allproduct() {
             });
         }
     }
-    const newcoins = async () => {
+
+    const endsale = async () =>{
         try{
-            const payload ={
-                coin : monney
-            }
-            await axios.post(config.api_path + '/member/coins', payload ,configMember.headers()).then(res =>{
-                
-                if (res.data.message === "success") {
-                    Swal.fire({
-                        title: 'บันทึกข้อมูล',
-                        text: 'บันทึกข้อมูลสำเร็จ',
-                        icon: 'success',
-                        timer: 2000
-                    })
-                    fetchmember()
-                    close()
+            await axios.get(config.api_path + '/bill/end' , config.headers()).then(res => {
+                if(res.data.message === 'success'){
+                    openBill();
+                    fatchBill();
+                    setTotalPrice(0);
+                    
                 }
             }).catch(err => {
                 throw err.response.data
             })
-        }catch (e) {
+            
+        }catch(e){
+            Swal.fire({
+                title: "Error",
+                text: e.message,
+                icon: "error",
+                timer: 2000
+            });
+        }
+    }
+    const newcoins = async () => {
+        try {
+            console.log(coins, totalPrice);
+            let monney = coins - totalPrice;
+            const payload = {
+                coin: monney
+            }
+            console.log(payload)
+            await axios.post(config.api_path + '/member/coins', payload, configMember.headers()).then(res => {
+                if (res.data.message === "success") {
+                    endsale();
+                    close();
+                    console.log('newcoins')
+                }
+            }).catch(err => {
+                throw err.response.data
+            })
+        } catch (e) {
             Swal.fire({
                 title: "Error",
                 text: e.message,
@@ -148,41 +167,43 @@ function Allproduct() {
             closebtn[i].click();
         }
     }
-
-    const fetchmember = async () => {
-        try {
-            axios.get(config.api_path + '/member/info', configMember.headers()).then(res => {
-                if (res.data.message === 'success') {
-                    setUserName(res.data.result.phone);
-                    
-                }
-            }).catch(err => {
-                throw err.response.data;
-            })
-        } catch (e) {
-            Swal.fire({
-                titel: "Error",
-                icon: "error",
-                text: e.message
-            })
+    const close2 = () => {
+        const modal = document.getElementById('modalEnd');
+        if (modal) {
+            modal.classList.remove('show');
+            modal.style.display = 'none';
+            const backdrop = document.querySelector('.modal-backdrop');
+            if (backdrop) {
+                backdrop.remove();
+            }
+            document.body.classList.remove('modal-open');
+            modal.setAttribute('aria-hidden', 'true');
         }
-    }
-
+    };
+    
+    
     const call = async (totalPrice) => {
-        
         try {
             console.log(totalPrice);
-            const response = await axios.post(config.api_path + '/api/call', { totalPrice });
-            const { count, code } = response.data;
-            setCoins(response.data.count)
-            newcoins();
-            console.log(`Count: ${count}`);
-            console.log(`Python process exited with code ${code}`);
+            await axios.post(config.api_path + '/api/call', { totalPrice }).then(res => {
+                if (res.data.message === 'success') {
+                    setCoins(res.data.counst)
+                    newcoins();
+                    
+                    Swal.fire({
+                        title: "ชำระเงินสำเร็จ",
+                        html: "กรุณารอซักครู่ กำลังดำเนินการ<br>ยอดเงินคงเหลือจะเก็บไว้ใช้ในครั้งถัดไป ",
+                        icon: 'success',
+                        showConfirmButton: true
+                    })
+                }
+            }).catch(err => {
+                throw err.response.data
+            })
         } catch (error) {
             console.error('Error:', error);
         }
     };
-    
 
     return (
         <>
@@ -278,20 +299,18 @@ function Allproduct() {
                     >
                         ยืนยันการสั่งซื้อ
                     </button>
-                    <button className="btn btn-primary mt-3 ms-3" onClick={e => newcoins()}>test</button>
+                    
                 </div>
             </Modal>
-
-            <div class="modal fade" id="modalEnd" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
-                <div class="modal-dialog modal-dialog-centered" role="document">
-                    <div class="modal-content">
-                        <div class="modal-header">
-                            <h5 class="modal-title" id="exampleModalLongTitle">รอการชำระเงิน</h5>
-                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                <span aria-hidden="true">&times;</span>
-                            </button>
+            
+            <div className="modal fade" id="modalEnd"  data-backdrop="static" >
+                <div className="modal-dialog modal-dialog-centered">
+                    <div className="modal-content">
+                        <div className="modal-header">
+                            <h5 className="modal-title" id="exampleModalLongTitle">รอการชำระเงิน</h5>
+                            <button id="btnModalClose" type="button" className="btn-close btn-Close" data-dismiss="modal" aria-label="Close"></button>
                         </div>
-                        <div class="modal-body">
+                        <div className="modal-body">
                             <div className="d-flex justify-content-center my-1">
                                 <div className="loader"></div>
                             </div>
@@ -302,8 +321,6 @@ function Allproduct() {
                     </div>
                 </div>
             </div>
-
-
         </>
     );
 }

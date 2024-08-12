@@ -8,7 +8,7 @@ function Template (props){
                 <Navbar/>
                 <SidebarMember/>
 
-                <div class="content-wrapper pt-3">
+                <div class="content-wrapper pt-2">
                     <section class="content">
                         {props.children}
                     </section>

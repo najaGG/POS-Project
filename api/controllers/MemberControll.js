@@ -27,7 +27,7 @@ app.post('/member/coins', async (req, res) => {
                 id: payload.id
             }
         });
-        res.send({ payload: payload});
+        res.send({ payload: payload,message: 'success' });
     } catch (e) {
         res.statusCode = 500;
         res.send({message: e.message});
