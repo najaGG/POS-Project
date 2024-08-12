@@ -28,6 +28,7 @@ app.get('/billsale/openbill', service.Islogin, async (req, res) => {
 })
 app.post('/product/sale', service.Islogin, async (req, res) => {
     try {
+        const ProductModel = require('../models/ProductModel');
         const payload = {
             adminID: service.getAdminId(req),
             status: 'open'
@@ -44,22 +45,37 @@ app.post('/product/sale', service.Islogin, async (req, res) => {
         const Buyproduct = await BuyproductModel.findOne({
             where: item
         })
+        const productInStock = await ProductModel.findOne({
+            where: { id: req.body.id }
+        });
+        const availableQty = productInStock.stock;
+
 
         const action = req.body.action
         let qty = 0
         if (Buyproduct == null && action === '+') {
-            item.qty = 1
-            qty = item.qty
-            await BuyproductModel.create(item)
+            if (availableQty >= 1) {
+                item.qty = 1;
+                qty = item.qty;
+                await BuyproductModel.create(item);
+            } else {
+                res.status(400).send({ message: 'Not enough quantity in stock' });
+                return;
+            }
         } else {
             if (action === '+') {
-                item.qty = parseInt(Buyproduct.qty) + 1;
-                qty = item.qty
+                if (availableQty >= parseInt(Buyproduct.qty) + 1) {
+                    item.qty = parseInt(Buyproduct.qty) + 1;
+                    qty = item.qty;
+                } else {
+                    res.status(400).send({ message: 'Not enough quantity in stock' });
+                    return;
+                }
             } else if (action === '-') {
                 item.qty = parseInt(Buyproduct.qty) - 1;
-                qty = item.qty
+                qty = item.qty;
                 if (item.qty <= 0) {
-                    qty = '0'
+                    qty = '0';
                     await BuyproductModel.destroy({
                         where: { id: Buyproduct.id }
                     });
@@ -67,14 +83,14 @@ app.post('/product/sale', service.Islogin, async (req, res) => {
                     return;
                 }
             } else {
-                res.status(400).send({ message: 'Invalid action'  });
+                res.status(400).send({ message: 'Invalid action' });
                 return;
             }
             await BuyproductModel.update(item, {
                 where: { id: Buyproduct.id },
             });
         }
-        res.send({ message: 'success' , qty: qty})
+        res.send({ message: 'success', qty: qty });
     } catch (e) {
         res.statusCode = 500;
         res.send({ message: e.message });
@@ -108,6 +124,23 @@ app.get('/Bill/currentInfo', service.Islogin, async (req, res) =>{
     }catch (e) {
         res.statusCode = 500;
         res.send({message: e.message});
+    }
+})
+
+app.get ('/bill/end',service.Islogin,async (req, res) => {
+    try{
+        await BillsaleModal.update({
+            status: 'pay',
+        },{
+            where: {
+                status: 'open',
+                adminID: service.getAdminId(req)
+            }
+        })
+        res.send({message: 'success'})
+    }catch(e){
+        res.statusCode =500
+        res.send({message:e.message})
     }
 })
 

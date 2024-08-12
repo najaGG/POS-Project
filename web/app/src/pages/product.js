@@ -14,13 +14,13 @@ function Allproduct() {
     const [Itemqty, setItemQty] = useState(0);
     const [currentBill, setCurrentBill] = useState({})
     const [totalPrice, setTotalPrice] = useState(0);
-    const [coins, setCoins] = useState(0)
     const [userName, setUserName] = useState();
-    const [monney , setMonney] = useState(300);
+    const [coins, setCoins] = useState();
     useEffect(() => {
         fatchData()
         openBill()
         fatchBill()
+        fetchcoin()
     }, [])
 
     const openBill = async () => {
@@ -38,6 +38,24 @@ function Allproduct() {
                 text: e.message,
                 icon: "error",
                 timer: 2000
+            })
+        }
+    }
+
+    const fetchcoin = async () => {
+        try {
+            axios.get(config.api_path + '/member/info', configMember.headers()).then(res => {
+                if (res.data.message === 'success') {
+                    setCoins(res.data.result.coin);
+                }
+            }).catch(err => {
+                throw err.response.data;
+            })
+        } catch (e) {
+            Swal.fire({
+                titel: "Error",
+                icon: "error",
+                text: e.message
             })
         }
     }
@@ -91,7 +109,7 @@ function Allproduct() {
         }
         setTotalPrice(sum);
     }
-    
+
     const buyproduct = async (item, action) => {
         try {
             item.action = action;
@@ -99,6 +117,13 @@ function Allproduct() {
                 if (res.data.message === 'success') {
                     item.qty = res.data.qty;
                     setItemQty(item.qty)
+                }else if(res.data.message === 'จำนวนสินค้าไม่เพียงพอ'){
+                    Swal.fire({
+                        title: 'จำนวนสินค้าไม่เพียงพอ',
+                        text: 'โปรดติดต่อผู้ดูแล หรือลดจำนวนสินค้า',
+                        icon: 'info',
+                        timer: 3000
+                    })
                 }
             }).catch(err => {
                 throw err.response.data
@@ -112,27 +137,48 @@ function Allproduct() {
             });
         }
     }
-    const newcoins = async () => {
-        try{
-            const payload ={
-                coin : monney
-            }
-            await axios.post(config.api_path + '/member/coins', payload ,configMember.headers()).then(res =>{
-                
-                if (res.data.message === "success") {
-                    Swal.fire({
-                        title: 'บันทึกข้อมูล',
-                        text: 'บันทึกข้อมูลสำเร็จ',
-                        icon: 'success',
-                        timer: 2000
-                    })
-                    fetchmember()
-                    close()
+
+    const endsale = async () => {
+        try {
+            await axios.get(config.api_path + '/bill/end', config.headers()).then(res => {
+                if (res.data.message === 'success') {
+                    openBill();
+                    fatchBill();
+                    fetchcoin()
+                    setTotalPrice(0);
+
                 }
             }).catch(err => {
                 throw err.response.data
             })
-        }catch (e) {
+
+        } catch (e) {
+            Swal.fire({
+                title: "Error",
+                text: e.message,
+                icon: "error",
+                timer: 2000
+            });
+        }
+    }
+    const newcoins = async (UCion) => {
+        try {
+            let monney = parseInt(coins) + parseInt(UCion);
+            let Umonney = monney - totalPrice;
+            const payload = {
+                coin: Umonney
+            }
+            console.log(payload)
+            await axios.post(config.api_path + '/member/coins', payload, configMember.headers()).then(res => {
+                if (res.data.message === "success") {
+                    endsale();
+                    close();
+                    close2();
+                }
+            }).catch(err => {
+                throw err.response.data
+            })
+        } catch (e) {
             Swal.fire({
                 title: "Error",
                 text: e.message,
@@ -148,41 +194,64 @@ function Allproduct() {
             closebtn[i].click();
         }
     }
+    const close2 = () => {
+        const modal = document.getElementById('modalEnd');
+        if (modal) {
+            // Remove "show" class to hide the modal
+            modal.classList.remove('show');
+            modal.style.display = 'none';
 
-    const fetchmember = async () => {
-        try {
-            axios.get(config.api_path + '/member/info', configMember.headers()).then(res => {
-                if (res.data.message === 'success') {
-                    setUserName(res.data.result.phone);
-                    
-                }
-            }).catch(err => {
-                throw err.response.data;
-            })
-        } catch (e) {
-            Swal.fire({
-                titel: "Error",
-                icon: "error",
-                text: e.message
-            })
-        }
-    }
+            // Remove any backdrop elements
+            const backdrops = document.querySelectorAll('.modal-backdrop');
+            backdrops.forEach((backdrop) => {
+                backdrop.parentNode.removeChild(backdrop);
+            });
 
-    const call = async (totalPrice) => {
-        
-        try {
-            console.log(totalPrice);
-            const response = await axios.post(config.api_path + '/api/call', { totalPrice });
-            const { count, code } = response.data;
-            setCoins(response.data.count)
-            newcoins();
-            console.log(`Count: ${count}`);
-            console.log(`Python process exited with code ${code}`);
-        } catch (error) {
-            console.error('Error:', error);
+            // Remove classes that prevent interaction with the background
+            document.body.classList.remove('modal-open');
+            document.body.style.overflow = ''; // Reset overflow style
+
+            // Ensure modal is hidden from screen readers
+            modal.setAttribute('aria-hidden', 'true');
         }
     };
-    
+
+
+
+
+    const call = async (totalPrice) => {
+        if (coins >= totalPrice) {
+            newcoins(0)
+            Swal.fire({
+                title: "ชำระเงินสำเร็จ",
+                html: "กรุณารอซักครู่ กำลังดำเนินการ<br>ยอดเงินคงเหลือจะเก็บไว้ใช้ในครั้งถัดไป ",
+                icon: 'success',
+                showConfirmButton: true
+            })
+        } else {
+            try {
+                console.log(totalPrice);
+                await axios.post(config.api_path + '/api/call', { totalPrice }).then(res => {
+                    if (res.data.message === 'success') {
+                        const UCion = res.data.count
+                        console.log('UCoin:', UCion)
+                        newcoins(UCion);
+                        Swal.fire({
+                            title: "ชำระเงินสำเร็จ",
+                            html: "กรุณารอซักครู่ กำลังดำเนินการ<br>ยอดเงินคงเหลือจะเก็บไว้ใช้ในครั้งถัดไป ",
+                            icon: 'success',
+                            showConfirmButton: true
+                        })
+                    }
+                }).catch(err => {
+                    throw err.response.data
+                })
+            } catch (error) {
+                console.error('Error:', error);
+            }
+        }
+
+    };
 
     return (
         <>
@@ -278,32 +347,26 @@ function Allproduct() {
                     >
                         ยืนยันการสั่งซื้อ
                     </button>
-                    <button className="btn btn-primary mt-3 ms-3" onClick={e => newcoins()}>test</button>
+
                 </div>
             </Modal>
 
-            <div class="modal fade" id="modalEnd" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
-                <div class="modal-dialog modal-dialog-centered" role="document">
-                    <div class="modal-content">
-                        <div class="modal-header">
-                            <h5 class="modal-title" id="exampleModalLongTitle">รอการชำระเงิน</h5>
-                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                <span aria-hidden="true">&times;</span>
-                            </button>
+            <div className="modal fade" id="modalEnd" data-backdrop="static" >
+                <div className="modal-dialog modal-dialog-centered">
+                    <div className="modal-content">
+                        <div className="modal-header">
+                            <h5 className="modal-title" id="exampleModalLongTitle">รอการชำระเงิน</h5>
+                            <button id="btnModalClose" type="button" className="btn-close btn-Close" data-dismiss="modal" aria-label="Close"></button>
                         </div>
-                        <div class="modal-body">
+                        <div className="modal-body">
                             <div className="d-flex justify-content-center my-1">
                                 <div className="loader"></div>
                             </div>
-                            <div className="d-flex justify-content-center mt-3">
-                                <p>จำนวนเงินปัจจุบัน : {coins}</p>
-                            </div>
+
                         </div>
                     </div>
                 </div>
             </div>
-
-
         </>
     );
 }
