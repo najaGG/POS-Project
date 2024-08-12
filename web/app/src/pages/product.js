@@ -14,12 +14,13 @@ function Allproduct() {
     const [Itemqty, setItemQty] = useState(0);
     const [currentBill, setCurrentBill] = useState({})
     const [totalPrice, setTotalPrice] = useState(0);
-    const [coins, setCoins] = useState(100)
     const [userName, setUserName] = useState();
+	const[coins, setCoins] = useState();
     useEffect(() => {
         fatchData()
         openBill()
         fatchBill()
+	fetchcoin()
     }, [])
 
     const openBill = async () => {
@@ -37,6 +38,24 @@ function Allproduct() {
                 text: e.message,
                 icon: "error",
                 timer: 2000
+            })
+        }
+    }
+
+	 const fetchcoin = async () => {
+        try {
+            axios.get(config.api_path + '/member/info', configMember.headers()).then(res => {
+                if (res.data.message === 'success') {
+                    setCoins(res.data.result.coin);
+                }
+            }).catch(err => {
+                throw err.response.data;
+            })
+        } catch (e) {
+            Swal.fire({
+                titel: "Error",
+                icon: "error",
+                text: e.message
             })
         }
     }
@@ -118,6 +137,7 @@ function Allproduct() {
                 if(res.data.message === 'success'){
                     openBill();
                     fatchBill();
+			fetchcoin()
                     setTotalPrice(0);
                     
                 }
@@ -134,19 +154,19 @@ function Allproduct() {
             });
         }
     }
-    const newcoins = async () => {
+    const newcoins = async (UCion) => {
         try {
-            console.log(coins, totalPrice);
-            let monney = coins - totalPrice;
+		let monney = parseInt(coins) + parseInt(UCion);
+            let Umonney = monney - totalPrice;
             const payload = {
-                coin: monney
+                coin: Umonney
             }
             console.log(payload)
             await axios.post(config.api_path + '/member/coins', payload, configMember.headers()).then(res => {
                 if (res.data.message === "success") {
                     endsale();
                     close();
-                    console.log('newcoins')
+                    close2();
                 }
             }).catch(err => {
                 throw err.response.data
@@ -170,25 +190,46 @@ function Allproduct() {
     const close2 = () => {
         const modal = document.getElementById('modalEnd');
         if (modal) {
+            // Remove "show" class to hide the modal
             modal.classList.remove('show');
             modal.style.display = 'none';
-            const backdrop = document.querySelector('.modal-backdrop');
-            if (backdrop) {
-                backdrop.remove();
-            }
+    
+            // Remove any backdrop elements
+            const backdrops = document.querySelectorAll('.modal-backdrop');
+            backdrops.forEach((backdrop) => {
+                backdrop.parentNode.removeChild(backdrop);
+            });
+    
+            // Remove classes that prevent interaction with the background
             document.body.classList.remove('modal-open');
+            document.body.style.overflow = ''; // Reset overflow style
+    
+            // Ensure modal is hidden from screen readers
             modal.setAttribute('aria-hidden', 'true');
         }
     };
     
     
+    
+    
     const call = async (totalPrice) => {
-        try {
+	if(coins >= totalPrice){
+		newcoins(0)
+		Swal.fire({
+                        title: "ชำระเงินสำเร็จ",
+                        html: "กรุณารอซักครู่ กำลังดำเนินการ<br>ยอดเงินคงเหลือจะเก็บไว้ใช้ในครั้งถัดไป ",
+                        icon: 'success',
+                        showConfirmButton: true
+                    })
+	}else{
+		try {
             console.log(totalPrice);
             await axios.post(config.api_path + '/api/call', { totalPrice }).then(res => {
                 if (res.data.message === 'success') {
-                    setCoins(res.data.counst)
-                    newcoins();
+			const UCion = res.data.count
+			console.log('UCoin:',UCion)
+                    
+                    newcoins(UCion);
                     
                     Swal.fire({
                         title: "ชำระเงินสำเร็จ",
@@ -202,7 +243,9 @@ function Allproduct() {
             })
         } catch (error) {
             console.error('Error:', error);
-        }
+        }	
+	}
+        
     };
 
     return (
@@ -314,9 +357,7 @@ function Allproduct() {
                             <div className="d-flex justify-content-center my-1">
                                 <div className="loader"></div>
                             </div>
-                            <div className="d-flex justify-content-center mt-3">
-                                <p>จำนวนเงินปัจจุบัน : {coins}</p>
-                            </div>
+       
                         </div>
                     </div>
                 </div>

@@ -34,31 +34,25 @@ app.post('/api/call', (req, res) => {
     if (totalPrice === undefined) {
         return res.status(400).json({ error: 'Missing coin parameter' });
     }
-
     const pythonProcess = spawn('python', ['coin.py', totalPrice]);
     let count = 0;
     let outputData = '';
-
     pythonProcess.stdout.on('data', (data) => {
-        outputData += data.toString();  // รวบรวมข้อมูลทั้งหมด
+        outputData += data.toString(); 
     });
 
     pythonProcess.stderr.on('data', (data) => {
         console.error(`Error: ${data}`);
     });
-
     pythonProcess.on('close', (code) => {
-        // ตรวจสอบข้อมูลทั้งหมดที่รวบรวมได้
+
         console.log(`Complete Python output: ${outputData}`);
-        
-        // แปลงข้อมูลออกเป็นบรรทัด
         const outputs = outputData.split('\n');
         outputs.forEach(line => {
             if (line.trim() === '1') {
-                count += 10;  // เพิ่มค่า count ทุกครั้งที่เจอ '1'
+                count += 10;  
             }
         });
-
         res.send({ count: count , message:'success' });
     });
 });
