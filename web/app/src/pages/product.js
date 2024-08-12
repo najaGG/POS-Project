@@ -15,12 +15,12 @@ function Allproduct() {
     const [currentBill, setCurrentBill] = useState({})
     const [totalPrice, setTotalPrice] = useState(0);
     const [userName, setUserName] = useState();
-	const[coins, setCoins] = useState();
+    const [coins, setCoins] = useState();
     useEffect(() => {
         fatchData()
         openBill()
         fatchBill()
-	fetchcoin()
+        fetchcoin()
     }, [])
 
     const openBill = async () => {
@@ -42,7 +42,7 @@ function Allproduct() {
         }
     }
 
-	 const fetchcoin = async () => {
+    const fetchcoin = async () => {
         try {
             axios.get(config.api_path + '/member/info', configMember.headers()).then(res => {
                 if (res.data.message === 'success') {
@@ -117,6 +117,13 @@ function Allproduct() {
                 if (res.data.message === 'success') {
                     item.qty = res.data.qty;
                     setItemQty(item.qty)
+                }else if(res.data.message === 'จำนวนสินค้าไม่เพียงพอ'){
+                    Swal.fire({
+                        title: 'จำนวนสินค้าไม่เพียงพอ',
+                        text: 'โปรดติดต่อผู้ดูแล หรือลดจำนวนสินค้า',
+                        icon: 'info',
+                        timer: 3000
+                    })
                 }
             }).catch(err => {
                 throw err.response.data
@@ -131,21 +138,21 @@ function Allproduct() {
         }
     }
 
-    const endsale = async () =>{
-        try{
-            await axios.get(config.api_path + '/bill/end' , config.headers()).then(res => {
-                if(res.data.message === 'success'){
+    const endsale = async () => {
+        try {
+            await axios.get(config.api_path + '/bill/end', config.headers()).then(res => {
+                if (res.data.message === 'success') {
                     openBill();
                     fatchBill();
-			fetchcoin()
+                    fetchcoin()
                     setTotalPrice(0);
-                    
+
                 }
             }).catch(err => {
                 throw err.response.data
             })
-            
-        }catch(e){
+
+        } catch (e) {
             Swal.fire({
                 title: "Error",
                 text: e.message,
@@ -156,7 +163,7 @@ function Allproduct() {
     }
     const newcoins = async (UCion) => {
         try {
-		let monney = parseInt(coins) + parseInt(UCion);
+            let monney = parseInt(coins) + parseInt(UCion);
             let Umonney = monney - totalPrice;
             const payload = {
                 coin: Umonney
@@ -193,59 +200,57 @@ function Allproduct() {
             // Remove "show" class to hide the modal
             modal.classList.remove('show');
             modal.style.display = 'none';
-    
+
             // Remove any backdrop elements
             const backdrops = document.querySelectorAll('.modal-backdrop');
             backdrops.forEach((backdrop) => {
                 backdrop.parentNode.removeChild(backdrop);
             });
-    
+
             // Remove classes that prevent interaction with the background
             document.body.classList.remove('modal-open');
             document.body.style.overflow = ''; // Reset overflow style
-    
+
             // Ensure modal is hidden from screen readers
             modal.setAttribute('aria-hidden', 'true');
         }
     };
-    
-    
-    
-    
+
+
+
+
     const call = async (totalPrice) => {
-	if(coins >= totalPrice){
-		newcoins(0)
-		Swal.fire({
-                        title: "ชำระเงินสำเร็จ",
-                        html: "กรุณารอซักครู่ กำลังดำเนินการ<br>ยอดเงินคงเหลือจะเก็บไว้ใช้ในครั้งถัดไป ",
-                        icon: 'success',
-                        showConfirmButton: true
-                    })
-	}else{
-		try {
-            console.log(totalPrice);
-            await axios.post(config.api_path + '/api/call', { totalPrice }).then(res => {
-                if (res.data.message === 'success') {
-			const UCion = res.data.count
-			console.log('UCoin:',UCion)
-                    
-                    newcoins(UCion);
-                    
-                    Swal.fire({
-                        title: "ชำระเงินสำเร็จ",
-                        html: "กรุณารอซักครู่ กำลังดำเนินการ<br>ยอดเงินคงเหลือจะเก็บไว้ใช้ในครั้งถัดไป ",
-                        icon: 'success',
-                        showConfirmButton: true
-                    })
-                }
-            }).catch(err => {
-                throw err.response.data
+        if (coins >= totalPrice) {
+            newcoins(0)
+            Swal.fire({
+                title: "ชำระเงินสำเร็จ",
+                html: "กรุณารอซักครู่ กำลังดำเนินการ<br>ยอดเงินคงเหลือจะเก็บไว้ใช้ในครั้งถัดไป ",
+                icon: 'success',
+                showConfirmButton: true
             })
-        } catch (error) {
-            console.error('Error:', error);
-        }	
-	}
-        
+        } else {
+            try {
+                console.log(totalPrice);
+                await axios.post(config.api_path + '/api/call', { totalPrice }).then(res => {
+                    if (res.data.message === 'success') {
+                        const UCion = res.data.count
+                        console.log('UCoin:', UCion)
+                        newcoins(UCion);
+                        Swal.fire({
+                            title: "ชำระเงินสำเร็จ",
+                            html: "กรุณารอซักครู่ กำลังดำเนินการ<br>ยอดเงินคงเหลือจะเก็บไว้ใช้ในครั้งถัดไป ",
+                            icon: 'success',
+                            showConfirmButton: true
+                        })
+                    }
+                }).catch(err => {
+                    throw err.response.data
+                })
+            } catch (error) {
+                console.error('Error:', error);
+            }
+        }
+
     };
 
     return (
@@ -342,11 +347,11 @@ function Allproduct() {
                     >
                         ยืนยันการสั่งซื้อ
                     </button>
-                    
+
                 </div>
             </Modal>
-            
-            <div className="modal fade" id="modalEnd"  data-backdrop="static" >
+
+            <div className="modal fade" id="modalEnd" data-backdrop="static" >
                 <div className="modal-dialog modal-dialog-centered">
                     <div className="modal-content">
                         <div className="modal-header">
@@ -357,7 +362,7 @@ function Allproduct() {
                             <div className="d-flex justify-content-center my-1">
                                 <div className="loader"></div>
                             </div>
-       
+
                         </div>
                     </div>
                 </div>
