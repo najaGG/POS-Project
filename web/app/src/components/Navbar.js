@@ -1,8 +1,5 @@
 import Swal from "sweetalert2";
-import axios from "axios";
-import config from "../config";
 import configMember from "../configMember";
-import { Link } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
 
 function Navbar() {
@@ -22,8 +19,6 @@ function Navbar() {
             }
         })
     }
-
-
     return (
         <>
             <nav className="main-header navbar navbar-expand navbar-white navbar-light">

@@ -7,8 +7,6 @@ import Swal from "sweetalert2";
 import './Allproduct.css'
 
 function Allproduct() {
-    const [expanded, setExpanded] = useState({});
-    const [quantities, setQuantities] = useState({});
     const [products, setProducts] = useState([]);
     useEffect(() => {
         fatchData()

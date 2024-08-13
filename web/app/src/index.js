@@ -2,8 +2,9 @@ import React from 'react';
 import ReactDOM from 'react-dom/client';
 import './index.css';
 import './App.css';
+
 import reportWebVitals from './reportWebVitals';
-import Home from './pages/Home';
+
 import RegAdmin from './pages/AdminReg'
 import Product from './pages/product';
 import Adminlogin from './pages/Adminlogin';
@@ -23,10 +24,6 @@ const router = createBrowserRouter([
     {
         path: "/",
         element: <Adminlogin />
-    },
-    {
-        path:"/home",
-        element: <Home />
     },
     {
         path:"/product",

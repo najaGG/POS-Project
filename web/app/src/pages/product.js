@@ -14,13 +14,11 @@ function Allproduct() {
     const [Itemqty, setItemQty] = useState(0);
     const [currentBill, setCurrentBill] = useState({})
     const [totalPrice, setTotalPrice] = useState(0);
-    const [userName, setUserName] = useState();
     const [coins, setCoins] = useState();
     useEffect(() => {
         fatchData()
         openBill()
         fatchBill()
-        fetchcoin()
     }, [])
 
     const openBill = async () => {
@@ -117,13 +115,6 @@ function Allproduct() {
                 if (res.data.message === 'success') {
                     item.qty = res.data.qty;
                     setItemQty(item.qty)
-                }else if(res.data.message === 'จำนวนสินค้าไม่เพียงพอ'){
-                    Swal.fire({
-                        title: 'จำนวนสินค้าไม่เพียงพอ',
-                        text: 'โปรดติดต่อผู้ดูแล หรือลดจำนวนสินค้า',
-                        icon: 'info',
-                        timer: 3000
-                    })
                 }
             }).catch(err => {
                 throw err.response.data
@@ -146,7 +137,6 @@ function Allproduct() {
                     fatchBill();
                     fetchcoin()
                     setTotalPrice(0);
-
                 }
             }).catch(err => {
                 throw err.response.data
@@ -215,9 +205,6 @@ function Allproduct() {
             modal.setAttribute('aria-hidden', 'true');
         }
     };
-
-
-
 
     const call = async (totalPrice) => {
         if (coins >= totalPrice) {
