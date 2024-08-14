@@ -26,6 +26,7 @@ app.get('/billsale/openbill', service.Islogin, async (req, res) => {
         res.send({ message: e.message });
     }
 })
+
 app.post('/product/sale', service.Islogin, async (req, res) => {
     try {
         const ProductModel = require('../models/ProductModel');
@@ -33,114 +34,119 @@ app.post('/product/sale', service.Islogin, async (req, res) => {
             adminID: service.getAdminId(req),
             status: 'open'
         }
-        const currentBill = await BillsaleModal.findOne({
-            where: payload
-        });
+        const currentBill = await BillsaleModal.findOne({ where: payload });
+
         const item = {
             price: req.body.price,
             productID: req.body.id,
             billSaleId: currentBill.id,
             adminID: payload.adminID
-        }
-        const Buyproduct = await BuyproductModel.findOne({
-            where: item
-        })
-        const productInStock = await ProductModel.findOne({
-            where: { id: req.body.id }
-        });
-        const availableQty = productInStock.stock;
+        };
 
+        const Buyproduct = await BuyproductModel.findOne({ where: item });
+        const productInStock = await ProductModel.findOne({ where: { id: req.body.id } });
+        let availableQty = parseInt(productInStock.stock); // แปลงค่าเป็นจำนวนเต็ม
+        const action = req.body.action;
+        let qty = 0;
 
-        const action = req.body.action
-        let qty = 0
+        console.log(`Available Quantity: ${availableQty}`);
+        console.log(`Current Buyproduct Qty: ${Buyproduct ? Buyproduct.qty : 'Not Found'}`);
+        console.log(`Action: ${action}`);
+
         if (Buyproduct == null && action === '+') {
             if (availableQty >= 1) {
                 item.qty = 1;
                 qty = item.qty;
                 await BuyproductModel.create(item);
+                await ProductModel.update({ stock: availableQty - 1 }, { where: { id: req.body.id } });
             } else {
-                res.status(400).send({ message: 'Not enough quantity in stock' });
+                res.status(400).send({ message: 'จำนวนสินค้าไม่เพียงพอ' });
                 return;
             }
-        } else {
+        } else if (Buyproduct) {
             if (action === '+') {
-                if (availableQty >= parseInt(Buyproduct.qty) + 1) {
+                if (availableQty > 0) {
                     item.qty = parseInt(Buyproduct.qty) + 1;
                     qty = item.qty;
+                    await BuyproductModel.update({ qty: item.qty }, { where: { id: Buyproduct.id } });
+                    await ProductModel.update({ stock: availableQty - 1 }, { where: { id: req.body.id } });
                 } else {
-                    res.status(400).send({ message: 'Not enough quantity in stock' });
+                    res.status(400).send({ message: 'จำนวนสินค้าไม่เพียงพอ' });
                     return;
                 }
             } else if (action === '-') {
                 item.qty = parseInt(Buyproduct.qty) - 1;
                 qty = item.qty;
+
+                await ProductModel.update({ stock: availableQty + 1 }, { where: { id: req.body.id } });
+
                 if (item.qty <= 0) {
                     qty = '0';
-                    await BuyproductModel.destroy({
-                        where: { id: Buyproduct.id }
-                    });
+                    await BuyproductModel.destroy({ where: { id: Buyproduct.id } });
                     res.send({ message: 'success', qty: qty });
                     return;
                 }
+
+                await BuyproductModel.update({ qty: item.qty }, { where: { id: Buyproduct.id } });
             } else {
                 res.status(400).send({ message: 'Invalid action' });
                 return;
             }
-            await BuyproductModel.update(item, {
-                where: { id: Buyproduct.id },
-            });
         }
+
         res.send({ message: 'success', qty: qty });
+    } catch (e) {
+        res.status(500).send({ message: e.message });
+    }
+});
+
+
+
+
+app.get('/Bill/currentInfo', service.Islogin, async (req, res) => {
+    try {
+        const BuyproductModel = require('../models/BuyproductModel');
+        const ProductModel = require('../models/ProductModel');
+
+        BuyproductModel.belongsTo(ProductModel, { foreignKey: 'productID' });
+        BuyproductModel.belongsTo(BillsaleModal, { foreignKey: 'billSaleId' });
+        BillsaleModal.hasMany(BuyproductModel, { foreignKey: 'billSaleId' });
+
+        const result = await BillsaleModal.findOne({
+            where: {
+                status: 'open',
+                adminID: service.getAdminId(req)
+            },
+            include: {
+                model: BuyproductModel,
+                order: [['id', 'DESC']],
+                include: {
+                    model: ProductModel,
+                    attributes: ['name']
+                }
+            }
+        })
+        res.send({ result: result })
     } catch (e) {
         res.statusCode = 500;
         res.send({ message: e.message });
     }
 })
 
-app.get('/Bill/currentInfo', service.Islogin, async (req, res) =>{
-    try{
-        const BuyproductModel = require('../models/BuyproductModel');
-        const ProductModel = require('../models/ProductModel');
-        
-        BuyproductModel.belongsTo(ProductModel, { foreignKey: 'productID' }); 
-        BuyproductModel.belongsTo(BillsaleModal, { foreignKey: 'billSaleId' });
-        BillsaleModal.hasMany(BuyproductModel, { foreignKey: 'billSaleId' });
-
-        const result = await BillsaleModal.findOne({
-            where: { 
-                status: 'open',
-                adminID: service.getAdminId(req)
-            },
-            include:{
-                model: BuyproductModel,
-                order:[['id','DESC']],
-                include:{
-                    model:ProductModel,
-                    attributes:['name']
-                }
-            }
-        })
-        res.send({result: result})
-    }catch (e) {
-        res.statusCode = 500;
-        res.send({message: e.message});
-    }
-})
-
-app.get ('/bill/end',service.Islogin,async (req, res) => {
-    try{
+app.get('/bill/end', service.Islogin, async (req, res) => {
+    try {
         await BillsaleModal.update({
             status: 'pay',
-        },{
+        }, {
             where: {
                 status: 'open',
                 adminID: service.getAdminId(req)
             }
         })
-        res.send({message: 'success'})
-    }catch(e){
-        res.statusCode =500
-        res.send({message:e.message})
+        res.send({ message: 'success' })
+    } catch (e) {
+        res.statusCode = 500
+        res.send({ message: e.message })
     }
 })
 

@@ -67,7 +67,6 @@ function Home() {
     }
     return (
         <>
-        
             <div className="containers">
                 <div className="bg"></div>
                 <div className="form-container">

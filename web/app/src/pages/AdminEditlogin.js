@@ -65,18 +65,13 @@ function EditAdmin() {
             setInput2Value(prevValue => prevValue.slice(0, -1));
         }
     }
-
-
     const handleBack = () =>{
         navigate('/memberlogin')
     }
     return (
         <>
-
             <div className="containers">
-
                 <div className="bg"></div>
-
                 <div className="form-container">
                     <div className="text-center mb-2" style={{ fontSize: 20 }}>Admin Edit Login </div>
                     <div className="row">
@@ -100,7 +95,6 @@ function EditAdmin() {
                             ))}
                             <button className="btn btn-outline-primary buttonREG" onClick={handledel}>Detele</button>
                             <button className="btn btn-outline-primary buttonREG" onClick={handleLogin}>Login</button>
-
                         </div>
                     </div>
                 </div>
@@ -108,7 +102,6 @@ function EditAdmin() {
                         <i class="fa-solid fa-xl fa-arrow-left" style={{color: "#ffffff"}} title="Back"></i>
                     </button>
             </div>
-
         </>
     )
 }
