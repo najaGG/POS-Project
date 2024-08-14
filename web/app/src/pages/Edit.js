@@ -80,7 +80,9 @@ function Editproduct() {
                     fatchData()
                     close()
                 }
-            });
+            }).catch(err => {
+                throw err.response.data
+            })
         } catch (e) {
             Swal.fire({
                 title: "Error",
@@ -286,7 +288,7 @@ function Editproduct() {
                                 onChange={e => setProduct({ ...product, price: e.target.value })} />
                         </div>
                     </div>
-                    <div className="col-12">
+                    <div className="col-8">
                         <div className="input-group input-group-lg mb-3">
                             <span className="input-group-text" id="inputGroup-sizing-lg">การใช้งานสินค้า</span>
                             <input type="text" className="form-control" aria-label="Sizing example input"
@@ -294,6 +296,22 @@ function Editproduct() {
                                 onChange={e => setProduct({ ...product, detail: e.target.value })} />
                         </div>
                     </div>
+                    <div className="col-4">
+                        <div className="input-group input-group-lg mb-3">
+                            <span className="input-group-text" id="inputGroup-sizing-lg">ตำแหน่งสินค้า</span>
+                            <select className="form-select" aria-label="Select product position"
+                                value={product.motor}
+                                
+                                onChange={e => setProduct({ ...product, motor: e.target.value })}>
+                                <option disabled>*กรุณาเลือกให้ไม่ซ่ำกัน*</option>
+                                <option value="1">1</option>
+                                <option value="2">2</option>
+                                <option value="3">3</option>
+                            </select>
+                        </div>
+                    </div>
+
+
                 </div>
                 <div className="mt-2 text-center">
                     <button type="submit" className="btn btn-primary mb-3" onClick={handlesave}>บันทึก</button>
@@ -340,32 +358,32 @@ function Editproduct() {
                 <div className="row">
                     <div className="mt-3 col-4">
                         <label>รหัสสินค้า</label>
-                        <input value={product.id} onChange={e => setProduct({ ...product, id: e.target.value })} 
-                        readOnly className="form-control" />
+                        <input value={product.id} onChange={e => setProduct({ ...product, id: e.target.value })}
+                            readOnly className="form-control" />
                     </div>
 
                     <div className="mt-3 col-4">
                         <label>ชื่อสินค้า</label>
                         <input value={product.name} onChange={e => setProduct({ ...product, name: e.target.value })}
-                        className="form-control" />
+                            className="form-control" />
                     </div>
 
                     <div className="mt-3 col-4">
                         <label>เพิ่มสินค้า</label>
-                        <input value={product.stock} onChange={e => setProduct({ ...product, stock: e.target.value })} 
-                        className="form-control" type="number" />
+                        <input value={product.stock} onChange={e => setProduct({ ...product, stock: e.target.value })}
+                            className="form-control" type="number" />
                     </div>
 
                     <div className="mt-3 col-3">
                         <label>ราคาจำหน่ายต่อชิ้น</label>
-                        <input value={product.price} onChange={e => setProduct({ ...product, price: e.target.value })} 
-                        className="form-control" type="number" />
+                        <input value={product.price} onChange={e => setProduct({ ...product, price: e.target.value })}
+                            className="form-control" type="number" />
                     </div>
 
                     <div className="mt-3 col-9">
                         <label>รายละเอียดเพิ่มเติม</label>
-                        <input value={product.detail} onChange={e => setProduct({ ...product, detail: e.target.value })} 
-                        className="form-control" />
+                        <input value={product.detail} onChange={e => setProduct({ ...product, detail: e.target.value })}
+                            className="form-control" />
                     </div>
                     <div className="mt-3 text-center">
                         <button onClick={handlesave} className="btn btn-outline-success">

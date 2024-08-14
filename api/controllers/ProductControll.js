@@ -3,85 +3,95 @@ const app = express();
 const ProductModel = require('../models/ProductModel');
 const service = require('./service');
 app.post('/product/insert', service.Islogin, async (req, res) => {
-    try{
-        let payload = req.body
+    try {
+        let payload = req.body;
         payload.adminID = service.getAdminId(req);
+        
+        const activeCount = await ProductModel.count({
+            where: { status: 'active' }
+        });
+        if (activeCount >= 3) {
+            return res.status(400).send({ message: 'ไม่สามารถเพิ่มสินค้าได้มากกว่า 3 ชิ้น' });
+        }
+        
         const result = await ProductModel.create(payload);
-        res.send({result: result,message: 'success'});
-    }catch(e) {
-        res.statusCode = 500;
-        res.send({massage: e.message});
+        res.send({ result: result, message: 'success' });
+    } catch (e) {
+        res.status(500).send({ message: e.message });
     }
-})
+});
 
-app.get('/product/list',service.Islogin, async (req, res) => {
-    try{
+
+app.get('/product/list', service.Islogin, async (req, res) => {
+    try {
         const result = await ProductModel.findAll({
             where: {
-                adminID: service.getAdminId(req)
+                adminID: service.getAdminId(req),
+                status: 'active'
             },
-            order:[['id','DESC']]
+            order: [['id', 'DESC']]
         });
-        res.send({result: result,message: 'success'});
-    }catch(e) {
-        res.statusCode =500;
-        res.send({message : e.message})
-    }
-})
-
-app.delete('/product/delete/:id',service.Islogin , async (req,res) =>{
-    try{
-        const result = await ProductModel.destroy({
-            where:{
-                id: req.params.id
-            }
-        })
-        res.send({result: result, message: 'success'});
-    }catch(e){
+        res.send({ result: result, message: 'success' });
+    } catch (e) {
         res.statusCode = 500;
-        res.send({message: e.message});
+        res.send({ message: e.message })
     }
 })
 
-app.post('/product/update',service.Islogin , async (req,res) =>{
-    try{
+app.delete('/product/delete/:id', service.Islogin, async (req, res) => {
+    try {
+        const result = await ProductModel.update(
+            { status: 'close' },
+            { where: { id: req.params.id } }
+        );
+
+        res.send({ result: result, message: 'success' });
+    } catch (e) {
+        res.statusCode = 500;
+        res.send({ message: e.message });
+    }
+})
+
+app.post('/product/update', service.Islogin, async (req, res) => {
+    try {
         let payload = req.body;
         payload.adminID = service.getAdminId(req)
 
-        const result = await ProductModel.update(payload,{
-            where:{
+        const result = await ProductModel.update(payload, {
+            where: {
                 id: req.body.id
             }
         });
-        res.send({result: result, message: 'success'});
-    }catch(e){
+        res.send({ result: result, message: 'success' });
+    } catch (e) {
         res.statusCode = 500;
-        res.send({message: e.message});
+        res.send({ message: e.message });
     }
 })
 
-app.get('/product/listsale' , service.Islogin , async (req,res) =>{
+app.get('/product/listsale', service.Islogin, async (req, res) => {
     const ProductImageModel = require('../models/ProductImageModel');
     ProductModel.hasMany(ProductImageModel, { foreignKey: 'productID' });
     ProductImageModel.belongsTo(ProductModel, { foreignKey: 'productID' })
 
-    try{
+    try {
         const result = await ProductModel.findAll({
-            where:{
-                adminID: service.getAdminId(req)
+            where: {
+                adminID: service.getAdminId(req),
+                status: 'active'
             },
-            include:{
+            include: {
                 model: ProductImageModel,
-                where:{
-                    Ismain : true
+                where: {
+                    Ismain: true
                 }
             },
-            order: [['id','DESC']]
+            order: [['id', 'DESC']]
         })
-        res.send({result: result, message: 'success'});
-    }catch(e){
+        res.send({ result: result, message: 'success' });
+    } catch (e) {
         res.statusCode = 500;
-        res.send({message: e.message});
+        res.send({ message: e.message });
     }
 })
 
