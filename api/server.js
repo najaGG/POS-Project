@@ -38,22 +38,39 @@ app.post('/api/call', (req, res) => {
     let count = 0;
     let outputData = '';
     pythonProcess.stdout.on('data', (data) => {
-        outputData += data.toString(); 
+        outputData += data.toString();
     });
-
     pythonProcess.stderr.on('data', (data) => {
         console.error(`Error: ${data}`);
     });
     pythonProcess.on('close', (code) => {
-
         console.log(`Complete Python output: ${outputData}`);
         const outputs = outputData.split('\n');
         outputs.forEach(line => {
             if (line.trim() === '1') {
-                count += 10;  
+                count += 10;
             }
         });
-        res.send({ count: count , message:'success' });
+        res.send({ count: count, message: 'success' });
+    });
+});
+
+app.post('/api/motor', (req, res) => {
+    const payload = req.body;
+
+    // แปลง payload เป็น JSON string เพื่อนำไปใช้กับ Python script
+    const jsonString = JSON.stringify(payload);
+
+    // เรียกใช้สคริปต์ Python และส่ง JSON string ไปเป็นอาร์กิวเมนต์
+    const pythonProcess = spawn('python', ['motor.py', jsonString]);
+
+    // การรับข้อมูลกลับจากสคริปต์ Python
+    pythonProcess.stdout.on('data', (data) => {
+        console.log(`Output: ${data}`);
+    });
+
+    pythonProcess.stderr.on('data', (data) => {
+        console.error(`Error: ${data}`);
     });
 });
 

@@ -49,10 +49,6 @@ app.post('/product/sale', service.Islogin, async (req, res) => {
         const action = req.body.action;
         let qty = 0;
 
-        console.log(`Available Quantity: ${availableQty}`);
-        console.log(`Current Buyproduct Qty: ${Buyproduct ? Buyproduct.qty : 'Not Found'}`);
-        console.log(`Action: ${action}`);
-
         if (Buyproduct == null && action === '+') {
             if (availableQty >= 1) {
                 item.qty = 1;
@@ -100,9 +96,6 @@ app.post('/product/sale', service.Islogin, async (req, res) => {
     }
 });
 
-
-
-
 app.get('/Bill/currentInfo', service.Islogin, async (req, res) => {
     try {
         const BuyproductModel = require('../models/BuyproductModel');
@@ -122,7 +115,7 @@ app.get('/Bill/currentInfo', service.Islogin, async (req, res) => {
                 order: [['id', 'DESC']],
                 include: {
                     model: ProductModel,
-                    attributes: ['name']
+                    attributes: ['name','motor']
                 }
             }
         })

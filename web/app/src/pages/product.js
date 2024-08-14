@@ -129,6 +129,28 @@ function Allproduct() {
         }
     }
 
+    const motor = async () => {
+        try {
+            const payload = currentBill.buyproducts.map(products => ({
+                motorid: products.product.motor,
+                numberrounds: products.qty
+            }));
+            
+            await axios.post(config.api_path + '/api/motor', payload).then(res => {
+                console.log(res.data)
+            }).catch(err => {
+                throw err.response.data
+            })
+        } catch (e) {
+            Swal.fire({
+                title: "Error",
+                text: e.message,
+                icon: "error",
+                timer: 2000
+            })
+        }
+    }
+
     const endsale = async () => {
         try {
             await axios.get(config.api_path + '/bill/end', config.headers()).then(res => {
@@ -296,7 +318,9 @@ function Allproduct() {
                 <div class="d-flex justify-content-center mb-1">
                     <button className="btn btn-primary btn-lg " onClick={fatchBill} data-toggle='modal' data-target="#modalEndSale">
                         <i class="fa-solid fa-cart-shopping me-2"></i>ยืนยันการสั่งซื้อ
-                    </button></div>
+
+                    </button>
+                    <button className="btn btn-info ms-5" onClick={e => motor()}>TEST</button></div>
 
             </Template>
             <Modal id='modalEndSale' title="ยืนยันการซื้อสินค้า">
@@ -334,6 +358,7 @@ function Allproduct() {
                     >
                         ยืนยันการสั่งซื้อ
                     </button>
+
 
                 </div>
             </Modal>
