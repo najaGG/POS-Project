@@ -19,6 +19,7 @@ function Allproduct() {
         fatchData()
         openBill()
         fatchBill()
+        fetchcoin()
     }, [])
 
     const openBill = async () => {
