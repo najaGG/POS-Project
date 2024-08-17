@@ -136,6 +136,7 @@ function Allproduct() {
                 motorid: products.product.motor,
                 numberrounds: products.qty
             }));
+            console.log("motor: ",payload);
             
             await axios.post(config.api_path + '/api/motor', payload).then(res => {
                 console.log(res.data)
@@ -185,6 +186,7 @@ function Allproduct() {
             await axios.post(config.api_path + '/member/coins', payload, configMember.headers()).then(res => {
                 if (res.data.message === "success") {
                     endsale();
+                    motor()
                     close();
                     close2();
                 }
@@ -321,7 +323,7 @@ function Allproduct() {
                         <i class="fa-solid fa-cart-shopping me-2"></i>ยืนยันการสั่งซื้อ
 
                     </button>
-                    <button className="btn btn-info ms-5" onClick={e => motor()}>TEST</button></div>
+                </div>
 
             </Template>
             <Modal id='modalEndSale' title="ยืนยันการซื้อสินค้า">

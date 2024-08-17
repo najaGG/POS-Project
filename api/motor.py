@@ -18,9 +18,9 @@ def control_motor(motorid, numberrounds):
     from time import sleep
 
     motor_pins = {
-        1: Motor(forward=17, backward=18),
-        2: Motor(forward=22, backward=23),
-        3: Motor(forward=24, backward=25),
+        1: Motor(forward=6, backward=12),
+        2: Motor(forward=19, backward=16),
+        3: Motor(forward=26, backward=20),
     }
 
     motor = motor_pins.get(motorid)
@@ -43,6 +43,9 @@ for data in data_list:
         motorid = data.get('motorid')
         numberrounds = data.get('numberrounds')
         if motorid is not None and numberrounds is not None:
+            # แปลง motorid และ numberrounds ให้เป็น integer
+            motorid = int(motorid)
+            numberrounds = int(numberrounds)
             control_motor(motorid, numberrounds)
         else:
             print("Invalid data format:", data)
@@ -51,3 +54,5 @@ for data in data_list:
 
 # ส่งผลลัพธ์กลับไปยัง Node.js
 sys.stdout.flush()
+
+
