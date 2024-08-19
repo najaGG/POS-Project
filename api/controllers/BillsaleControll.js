@@ -6,6 +6,8 @@ const jwt = require('jsonwebtoken');
 const BuyproductModel = require('../models/BuyproductModel');
 const BillsaleModal = require('../models/BillsaleModal');
 
+const { Sequelize } = require('sequelize');
+
 require('dotenv').config()
 
 app.get('/billsale/openbill', service.Islogin, async (req, res) => {
@@ -112,13 +114,15 @@ app.get('/Bill/currentInfo', service.Islogin, async (req, res) => {
             },
             include: {
                 model: BuyproductModel,
+                attributes: ['productID', 'qty','price'],
                 order: [['id', 'DESC']],
                 include: {
                     model: ProductModel,
-                    attributes: ['name','motor']
+                    attributes: ['name', 'motor','stock']
                 }
             }
         })
+
         res.send({ result: result })
     } catch (e) {
         res.statusCode = 500;
@@ -128,6 +132,31 @@ app.get('/Bill/currentInfo', service.Islogin, async (req, res) => {
 
 app.get('/bill/end', service.Islogin, async (req, res) => {
     try {
+        const BuyproductModel = require('../models/BuyproductModel');
+        const ProductModel = require('../models/ProductModel');
+
+        BuyproductModel.belongsTo(ProductModel, { foreignKey: 'productID' });
+        BuyproductModel.belongsTo(BillsaleModal, { foreignKey: 'billSaleId' });
+        BillsaleModal.hasMany(BuyproductModel, { foreignKey: 'billSaleId' });
+
+        const result = await BillsaleModal.findOne({
+            
+            where: {
+                status: 'open',
+                adminID: service.getAdminId(req)
+            },
+            include: {
+                model: BuyproductModel,
+                attributes: ['productID', 'qty'],
+                order: [['id', 'DESC']],
+                include: {
+                    model: ProductModel,
+                    attributes: ['name', 'motor','stock'],
+                }
+            }
+        })
+
+        res.send({ result: result })
         await BillsaleModal.update({
             status: 'pay',
         }, {
