@@ -21,7 +21,6 @@ app.post('/product/insert', service.Islogin, async (req, res) => {
     }
 });
 
-
 app.get('/product/list', service.Islogin, async (req, res) => {
     try {
         const result = await ProductModel.findAll({
