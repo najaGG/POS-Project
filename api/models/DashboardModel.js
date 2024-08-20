@@ -12,11 +12,15 @@ const DashboardModel = conn.define('dashboard',{
     nameProduct:{
         type: DataTypes.STRING
     },
-    storkD:{
+    stockD:{
         type: DataTypes.BIGINT,
         defaultValue: 0
     },
     decrease:{
+        type: DataTypes.BIGINT,
+        defaultValue: 0
+    },
+    all:{
         type: DataTypes.BIGINT,
         defaultValue: 0
     }

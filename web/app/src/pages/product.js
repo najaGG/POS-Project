@@ -15,6 +15,7 @@ function Allproduct() {
     const [currentBill, setCurrentBill] = useState({})
     const [totalPrice, setTotalPrice] = useState(0);
     const [coins, setCoins] = useState();
+    const [data, setData] = useState({})
     useEffect(() => {
         fatchData()
         openBill()
@@ -157,10 +158,12 @@ function Allproduct() {
         try {
             await axios.get(config.api_path + '/bill/end', config.headers()).then(res => {
                 if (res.data.message === 'success') {
-                    openBill();
+                    setData(res.data.result)
+                    console.log(data)
+                    /*openBill();
                     fatchBill();
                     fetchcoin()
-                    setTotalPrice(0);
+                    setTotalPrice(0);*/
                 }
             }).catch(err => {
                 throw err.response.data
