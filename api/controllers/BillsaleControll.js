@@ -108,6 +108,7 @@ app.get('/Bill/currentInfo', service.Islogin, async (req, res) => {
         BillsaleModal.hasMany(BuyproductModel, { foreignKey: 'billSaleId' });
 
         const result = await BillsaleModal.findOne({
+            
             where: {
                 status: 'open',
                 adminID: service.getAdminId(req)
@@ -140,7 +141,7 @@ app.get('/bill/end', service.Islogin, async (req, res) => {
         BillsaleModal.hasMany(BuyproductModel, { foreignKey: 'billSaleId' });
 
         const result = await BillsaleModal.findOne({
-            
+            attributes: ['status', 'adminID'],
             where: {
                 status: 'open',
                 adminID: service.getAdminId(req)
@@ -156,7 +157,6 @@ app.get('/bill/end', service.Islogin, async (req, res) => {
             }
         })
 
-        res.send({ result: result })
         await BillsaleModal.update({
             status: 'pay',
         }, {
@@ -165,7 +165,7 @@ app.get('/bill/end', service.Islogin, async (req, res) => {
                 adminID: service.getAdminId(req)
             }
         })
-        res.send({ message: 'success' })
+        res.send({ message: 'success' , result : result })
     } catch (e) {
         res.statusCode = 500
         res.send({ message: e.message })
