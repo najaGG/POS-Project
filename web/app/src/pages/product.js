@@ -15,13 +15,27 @@ function Allproduct() {
     const [currentBill, setCurrentBill] = useState({})
     const [totalPrice, setTotalPrice] = useState(0);
     const [coins, setCoins] = useState();
-    const [data, setData] = useState({})
+    const [datas, setDatas] = useState([]);
     useEffect(() => {
         fatchData()
         openBill()
         fatchBill()
         fetchcoin()
     }, [])
+    useEffect(() => {
+        if (datas.buyproducts) {
+            const payloads = datas.buyproducts.map(product => ({
+                productID: product.productID,
+                decrease: parseInt(product.qty),
+                nameProduct: product.product.name,
+                stockD: parseInt(product.product.stock),
+                all: parseInt(product.product.stock) - parseInt(product.qty) 
+            }));
+            payloads.forEach(async (payload) => {
+                await datadashboard(payload);
+            });
+        }
+    }, [datas]);
 
     const openBill = async () => {
         try {
@@ -137,7 +151,6 @@ function Allproduct() {
                 motorid: products.product.motor,
                 numberrounds: products.qty
             }));
-            console.log("motor: ",payload);
             
             await axios.post(config.api_path + '/api/motor', payload).then(res => {
                 console.log(res.data)
@@ -154,19 +167,32 @@ function Allproduct() {
         }
     }
 
+    const datadashboard = async (payload) => {
+        try{
+            await axios.post(config.api_path + '/data/dashboard',payload)
+        }catch (e) {
+            Swal.fire({
+                title: "Error",
+                text: e.message,
+                icon: "error",
+                timer: 2000
+            });
+        }
+        
+    }
+
     const endsale = async () => {
         try {
             await axios.get(config.api_path + '/bill/end', config.headers()).then(res => {
                 if (res.data.message === 'success') {
-                    setData(res.data.result)
-                    console.log(data)
-                    /*openBill();
+                    setDatas(res.data.result)
+                    openBill();
                     fatchBill();
-                    fetchcoin()
-                    setTotalPrice(0);*/
+                    fetchcoin();
+                    setTotalPrice(0); 
                 }
             }).catch(err => {
-                throw err.response.data
+                throw err.response.data;
             })
 
         } catch (e) {
@@ -178,6 +204,7 @@ function Allproduct() {
             });
         }
     }
+
     const newcoins = async (UCion) => {
         try {
             let monney = parseInt(coins) + parseInt(UCion);
@@ -185,7 +212,6 @@ function Allproduct() {
             const payload = {
                 coin: Umonney
             }
-            console.log(payload)
             await axios.post(config.api_path + '/member/coins', payload, configMember.headers()).then(res => {
                 if (res.data.message === "success") {
                     endsale();

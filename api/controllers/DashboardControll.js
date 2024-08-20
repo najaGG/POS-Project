@@ -38,6 +38,25 @@ app.get('/api/dashboard-data', async (req, res) => {
     }
 });
 
+app.post('/data/dashboard',async (req, res) => {
+    try{
+        let payload = req.body;
+        await DashboardModel.create(payload);
+        res.send({message: 'success',payload: payload});
+    }catch (e) {
+        res.status(500).send(e.message);
+    }
+})
+
+app.get('/datas/dashboard', async (req, res) => {
+    try{
+        const result = await DashboardModel.findAll();
+        res.send({message: 'success',payload: result});
+    }catch (e){
+        res.status(500).send(e.message);
+    }
+})
+
 
 module.exports = app;
 
