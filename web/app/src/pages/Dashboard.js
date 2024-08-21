@@ -92,21 +92,21 @@ function Dashboard() {
                     data: labels.map(day => currentMonthData[day - 1]?.stockD || 0),
                     borderColor: 'rgba(79, 186, 42, 1)',
                     borderWidth: 3,
-                    fill: false,
+                    fill: true,
                 },
                 {
                     label: 'สินค้าที่จำหน่ายออก',
                     data: labels.map(day => currentMonthData[day - 1]?.decrease || 0),
                     borderColor: 'rgba(236, 87, 87, 1)',
                     borderWidth: 3,
-                    fill: false,
+                    fill: true,
                 },
                 {
                     label: 'สินค้าคงเหลือ',
                     data: labels.map(day => currentMonthData[day - 1]?.all || 0),
                     borderColor: 'rgba(231, 212, 43, 1)',
                     borderWidth: 3,
-                    fill: false,
+                    fill: true,
                 }
             ],
         };
