@@ -132,5 +132,4 @@ function Dashboard() {
         </Template>
     );
 }
-
 export default Dashboard;
