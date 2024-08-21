@@ -1,7 +1,7 @@
 const express = require('express');
 const app = express();
 const DashboardModel = require('../models/DashboardModel');
-const { Op } = require('sequelize');
+const { Op, Sequelize } = require('sequelize');
 
 app.get('/api/dashboard-data', async (req, res) => {
     try {
@@ -38,21 +38,28 @@ app.get('/api/dashboard-data', async (req, res) => {
     }
 });
 
-app.post('/data/dashboard',async (req, res) => {
-    try{
+app.post('/data/dashboard', async (req, res) => {
+    try {
         let payload = req.body;
         await DashboardModel.create(payload);
-        res.send({message: 'success',payload: payload});
-    }catch (e) {
+        res.send({ message: 'success', payload: payload });
+    } catch (e) {
         res.status(500).send(e.message);
     }
 })
 
 app.get('/datas/dashboard', async (req, res) => {
-    try{
-        const result = await DashboardModel.findAll();
-        res.send({message: 'success',payload: result});
-    }catch (e){
+    try {
+        const result = await DashboardModel.findAll({
+            attributes: ['productID', 'nameProduct', 'stockD', 'decrease', 'all', 'createdAt'],
+            where: {
+                createdAt: {
+                    [Op.gte]: Sequelize.literal("NOW() - INTERVAL '1 month'")
+                }
+            }
+        })
+        res.send({ message: 'success', result: result});
+    } catch (e) {
         res.status(500).send(e.message);
     }
 })
