@@ -64,6 +64,5 @@ app.get('/datas/dashboard', async (req, res) => {
     }
 })
 
-
 module.exports = app;
 
