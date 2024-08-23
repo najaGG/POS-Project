@@ -35,7 +35,11 @@ function Home() {
                             title: 'โปรดจดจำรหัสผ่านของท่าน',
                             icon: 'success',
                             text: 'เพื่อสิทธิประโยชน์ของท่านเอง',
-                            showConfirmButton: true
+                            timer: 2000,
+                            timerProgressBar: true,
+                            didOpen: () => {
+                                Swal.showLoading();
+                            }
                         });
                         localStorage.setItem(configMember.token_name, res.data.token);
                         navigate('/product')

@@ -26,5 +26,16 @@ app.post('/owner/check', async (req, res) => {
     }
 })
 
+app.post('/owner/insert', async (req, res) => {
+    try{
+        let payload = req.body;
+        await OwnerModel.create(payload);
+        res.send({message: "success"});
+    }catch(e){
+        res.statusCode = 500;
+        res.send({message: e.message});
+    }
+})
+
 module.exports = app;
 
