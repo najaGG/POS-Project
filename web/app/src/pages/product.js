@@ -6,8 +6,10 @@ import config from "../config";
 import Swal from "sweetalert2";
 import './Allproduct.css'
 import configMember from "../configMember"
+import { useNavigate } from "react-router-dom";
 
 function Allproduct() {
+    const navigate = useNavigate();
 
     const [products, setProducts] = useState([]);
     const [billSale, setBillSale] = useState({});
@@ -29,7 +31,7 @@ function Allproduct() {
                 decrease: parseInt(product.qty),
                 nameProduct: product.product.name,
                 stockD: parseInt(product.product.stock),
-                all: parseInt(product.product.stock) - parseInt(product.qty) 
+                all: parseInt(product.product.stock) - parseInt(product.qty)
             }));
             payloads.forEach(async (payload) => {
                 await datadashboard(payload);
@@ -151,7 +153,7 @@ function Allproduct() {
                 motorid: products.product.motor,
                 numberrounds: products.qty
             }));
-            
+
             await axios.post(config.api_path + '/api/motor', payload).then(res => {
                 console.log(res.data)
             }).catch(err => {
@@ -168,9 +170,9 @@ function Allproduct() {
     }
 
     const datadashboard = async (payload) => {
-        try{
-            await axios.post(config.api_path + '/data/dashboard',payload)
-        }catch (e) {
+        try {
+            await axios.post(config.api_path + '/data/dashboard', payload)
+        } catch (e) {
             Swal.fire({
                 title: "Error",
                 text: e.message,
@@ -178,7 +180,11 @@ function Allproduct() {
                 timer: 2000
             });
         }
-        
+
+    }
+    const handleSingout = () => {
+        localStorage.removeItem(configMember.token_name);
+        navigate('/memberlogin');
     }
 
     const endsale = async () => {
@@ -189,12 +195,14 @@ function Allproduct() {
                     openBill();
                     fatchBill();
                     fetchcoin();
-                    setTotalPrice(0); 
+                    setTotalPrice(0);
+                    setTimeout(() => {
+                        handleSingout();
+                    }, 2000);
                 }
             }).catch(err => {
                 throw err.response.data;
             })
-
         } catch (e) {
             Swal.fire({
                 title: "Error",
@@ -265,9 +273,13 @@ function Allproduct() {
             newcoins(0)
             Swal.fire({
                 title: "ชำระเงินสำเร็จ",
-                html: "กรุณารอซักครู่ กำลังดำเนินการ<br>ยอดเงินคงเหลือจะเก็บไว้ใช้ในครั้งถัดไป ",
+                html: "กรุณารอซักครู่ กำลังดำเนินการ<br>ยอดเงินคงเหลือจะเก็บไว้ใช้ในครั้งถัดไป<br>จะทำการออกจากระบบในอีกซักครู่",
                 icon: 'success',
-                showConfirmButton: true
+                timer: 3000,
+                timerProgressBar: true,
+                didOpen: () => {
+                    Swal.showLoading();
+                }
             })
         } else {
             try {
@@ -279,9 +291,13 @@ function Allproduct() {
                         newcoins(UCion);
                         Swal.fire({
                             title: "ชำระเงินสำเร็จ",
-                            html: "กรุณารอซักครู่ กำลังดำเนินการ<br>ยอดเงินคงเหลือจะเก็บไว้ใช้ในครั้งถัดไป ",
+                            html: "กรุณารอซักครู่ กำลังดำเนินการ<br>ยอดเงินคงเหลือจะเก็บไว้ใช้ในครั้งถัดไป<br>จะทำการออกจากระบบในอีกซักครู่",
                             icon: 'success',
-                            showConfirmButton: true
+                            timer: 3000,
+                            timerProgressBar: true,
+                            didOpen: () => {
+                                Swal.showLoading();
+                            }
                         })
                     }
                 }).catch(err => {
@@ -390,8 +406,6 @@ function Allproduct() {
                     >
                         ยืนยันการสั่งซื้อ
                     </button>
-
-
                 </div>
             </Modal>
 
@@ -406,7 +420,6 @@ function Allproduct() {
                             <div className="d-flex justify-content-center my-1">
                                 <div className="loader"></div>
                             </div>
-
                         </div>
                     </div>
                 </div>

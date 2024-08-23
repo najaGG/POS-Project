@@ -35,8 +35,11 @@ function Home() {
                         Swal.fire({
                             title: 'ยินดีต้อนรับเข้าสู่ระบบ',
                             icon: 'success',
-                            text: '',
-                            showConfirmButton: true
+                            timer: 2000,
+                            timerProgressBar: true,
+                            didOpen: () => {
+                                Swal.showLoading();
+                            }
                         });
                         localStorage.setItem(config.token_name, res.data.token);
                         navigate('/memberlogin')
