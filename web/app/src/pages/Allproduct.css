@@ -11,6 +11,20 @@
   height: 10vh;
 }
 
+.card-image {
+  width: 100%;
+  height: 100%;
+  object-fit: contain; /* ย่อหรือขยายรูปภาพให้พอดีในกรอบโดยไม่ตัดขอบ */
+}
+.card-image-container {
+  width: 100%;
+  height: 330px; /* กำหนดความสูงคงที่สำหรับรูปภาพในการ์ด */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden; /* ซ่อนส่วนที่เกินกรอบ */
+}
+
 .loader {
   width: 80px;
   height: 40px;

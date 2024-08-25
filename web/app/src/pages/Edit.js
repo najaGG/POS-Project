@@ -263,7 +263,7 @@ function Editproduct() {
         <>
             <Template>
                 <div className="row">
-                    <p className="text-start">แก้ไข / เพิ่มเติมสินค้า</p>
+                    <p className="text-start" style={{fontSize:'24px'}}><storng>เพิ่มสินค้า</storng></p>
                     <div className="col-4">
                         <div className="input-group input-group-lg mb-3 ">
                             <span className="input-group-text" id="inputGroup-sizing-lg">ชื่อสินค้า</span>
@@ -354,7 +354,7 @@ function Editproduct() {
                 </table>
             </Template>
 
-            <Modal id="modalProduct" title="เพิ่มสินค้า" modalSize='modal-lg'>
+            <Modal id="modalProduct" title="แก้ไขสินค้า" modalSize='modal-lg'>
                 <div className="row">
                     <div className="mt-3 col-4">
                         <label>รหัสสินค้า</label>

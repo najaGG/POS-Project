@@ -320,11 +320,13 @@ function Allproduct() {
                                 <div class="card-headert text-center mb-1" style={{ fontSize: '25px' }}>
                                     {item.name}
                                 </div>
-                                <img
-                                    src={`${config.api_path}/uploads/${item.productimages[0].imgName}`}
-                                    className="card-img-top "
-                                    style={{ marginBottom: '5px' }}
-                                />
+                                <div class="card-image-container">
+                                    <img
+                                        src={`${config.api_path}/uploads/${item.productimages[0].imgName}`}
+                                        className="card-img-top card-image"
+                                        style={{ marginBottom: '5px' }}
+                                    />
+                                </div>
                                 <div className="card-body" style={{ display: 'flex', flexDirection: 'column', justifyContent: 'flex-start', alignItems: 'flex-start' }}>
                                     <h5 className="card-title" style={{ textAlign: 'left', }}>
                                         <div style={{ textAlign: 'left', marginTop: '0px', fontWeight: 'bold' }}>

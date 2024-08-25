@@ -88,7 +88,7 @@ function Dashboard() {
             labels,
             datasets: [
                 {
-                    label: 'สินค้าภายที่เพิ่มเข้า',
+                    label: 'สินค้าที่เพิ่มเข้า',
                     data: labels.map(day => currentMonthData[day - 1]?.stockD || 0),
                     borderColor: 'rgba(79, 186, 42, 1)',
                     borderWidth: 3,
