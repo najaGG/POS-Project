@@ -8,7 +8,7 @@ app.get('/api/dashboard-data', async (req, res) => {
         const { startDate, endDate } = req.query;
 
         const data = await DashboardModel.findAll({
-            attributes: ['productID', 'nameProduct', 'storkD', 'decrease', 'createdAt'],
+            attributes: ['productID', 'nameProduct', 'storkD', 'decrease', 'createdAt','status'],
             where: {
                 createdAt: {
                     [Op.between]: [new Date(startDate), new Date(endDate)]
@@ -50,19 +50,35 @@ app.post('/data/dashboard', async (req, res) => {
 
 app.get('/datas/dashboard', async (req, res) => {
     try {
-        const result = await DashboardModel.findAll({
+        const allData = await DashboardModel.findAll({
             attributes: ['productID', 'nameProduct', 'stockD', 'decrease', 'all', 'createdAt'],
             where: {
+                status: 'active',
                 createdAt: {
                     [Op.gte]: Sequelize.literal("NOW() - INTERVAL '1 month'")
+                },
+                decrease: {
+                    [Op.gt]: 0 
                 }
+            },
+            order: [['productID', 'ASC'], ['createdAt', 'DESC']]
+        });
+
+        const latestData = allData.reduce((acc, item) => {
+            if (!acc[item.productID] || item.createdAt > acc[item.productID].createdAt) {
+                acc[item.productID] = item;
             }
-        })
-        res.send({ message: 'success', result: result});
+            return acc;
+        }, {});
+
+        const result = Object.values(latestData).filter(item => item.decrease > 0);
+
+        res.send({ message: 'success', result: result });
     } catch (e) {
         res.status(500).send(e.message);
     }
-})
+});
+
 
 module.exports = app;
 

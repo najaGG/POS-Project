@@ -39,8 +39,7 @@ function Dashboard() {
             const res = await axios.get(config.api_path + '/datas/dashboard', config.headers());
             if (res.data.message === 'success') {
                 setDatas(res.data.result);
-
-                // สร้าง mapping สำหรับ productID กับ nameProduct
+    
                 const names = res.data.result.reduce((acc, item) => {
                     acc[item.productID] = item.nameProduct;
                     return acc;
@@ -51,66 +50,79 @@ function Dashboard() {
             Swal.fire('Error', 'Failed to fetch data', 'error');
         }
     };
-
+    
+    
     const getDaysInMonth = (month) => {
         const daysInMonth = moment(month, 'YYYY-MM').daysInMonth();
         return Array.from({ length: daysInMonth }, (_, i) => i + 1);
     };
 
     const formatChartData = (data, productID) => {
-        const filteredData = data.filter(item => item.productID === productID);
-        const groupedData = filteredData.reduce((acc, item) => {
-            const date = moment(item.createdAt).format('YYYY-MM-DD');
-            const monthYear = moment(item.createdAt).format('YYYY-MM');
+        const currentMonthYear = moment().format('YYYY-MM');
+    
+        // Filter data for the current month and year
+        const filteredData = data.filter(item => 
+            item.productID === productID && 
+            moment(item.createdAt).format('YYYY-MM') === currentMonthYear
+        );
+    
+        const groupedData = {};
+        let previousAll = 0;  
+    
+        filteredData.forEach(item => {
             const day = parseInt(moment(item.createdAt).format('D'), 10);
-
-            if (!acc[monthYear]) {
-                acc[monthYear] = Array.from({ length: 31 }, () => ({
-                    stockD: 0,
-                    decrease: 0,
-                    all: 0,
-                }));
+    
+            if (!groupedData[day]) {
+                groupedData[day] = { stockD: 0, decrease: 0, all: 0 };
             }
+    
+            groupedData[day].stockD += parseInt(item.stockD || 0);
+    
+            groupedData[day].decrease += parseInt(item.decrease || 0);
+        });
+    
+        const labels = getDaysInMonth(currentMonthYear);
+        labels.forEach(day => {
+            const currentData = groupedData[day] || { stockD: 0, decrease: 0, all: 0 };
+            currentData.all = previousAll + currentData.stockD - currentData.decrease;
 
-            if (day > 0 && day <= 31) {
-                acc[monthYear][day - 1].stockD += parseInt(item.stockD || 0);
-                acc[monthYear][day - 1].decrease += parseInt(item.decrease || 0);
-                acc[monthYear][day - 1].all += parseInt(item.all || 0);
-            }
+            previousAll = currentData.all;
 
-            return acc;
-        }, {});
-
-        const labels = getDaysInMonth(Object.keys(groupedData)[0] || '2024-08');
-        const currentMonthData = groupedData[Object.keys(groupedData)[0]] || [];
-
-        return {
+            groupedData[day] = currentData;
+        });
+    
+        const chartData = {
             labels,
             datasets: [
                 {
                     label: 'สินค้าที่เพิ่มเข้า',
-                    data: labels.map(day => currentMonthData[day - 1]?.stockD || 0),
+                    data: labels.map(day => groupedData[day]?.stockD || 0),
                     borderColor: 'rgba(79, 186, 42, 1)',
                     borderWidth: 3,
                     fill: true,
                 },
                 {
                     label: 'สินค้าที่จำหน่ายออก',
-                    data: labels.map(day => currentMonthData[day - 1]?.decrease || 0),
+                    data: labels.map(day => groupedData[day]?.decrease || 0),
                     borderColor: 'rgba(236, 87, 87, 1)',
                     borderWidth: 3,
                     fill: true,
                 },
                 {
                     label: 'สินค้าคงเหลือ',
-                    data: labels.map(day => currentMonthData[day - 1]?.all || 0),
+                    data: labels.map(day => groupedData[day]?.all || 0),
                     borderColor: 'rgba(231, 212, 43, 1)',
                     borderWidth: 3,
                     fill: true,
                 }
             ],
         };
+    
+        return chartData;
     };
+    
+    
+    
 
     const uniqueProductIDs = [...new Set(datas.map(item => item.productID))];
 
@@ -132,4 +144,5 @@ function Dashboard() {
         </Template>
     );
 }
+
 export default Dashboard;

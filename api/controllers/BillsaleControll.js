@@ -119,7 +119,7 @@ app.get('/Bill/currentInfo', service.Islogin, async (req, res) => {
                 order: [['id', 'DESC']],
                 include: {
                     model: ProductModel,
-                    attributes: ['name', 'motor','stock']
+                    attributes: ['name', 'motor','stock','status']
                 }
             }
         })
@@ -152,7 +152,7 @@ app.get('/bill/end', service.Islogin, async (req, res) => {
                 order: [['id', 'DESC']],
                 include: {
                     model: ProductModel,
-                    attributes: ['name', 'motor','stock'],
+                    attributes: ['name', 'motor','stock','status'],
                 }
             }
         })

@@ -31,7 +31,8 @@ function Allproduct() {
                 decrease: parseInt(product.qty),
                 nameProduct: product.product.name,
                 stockD: parseInt(product.product.stock),
-                all: parseInt(product.product.stock) - parseInt(product.qty)
+                all: parseInt(product.product.stock) - parseInt(product.qty),
+                status:product.product.status
             }));
             payloads.forEach(async (payload) => {
                 await datadashboard(payload);

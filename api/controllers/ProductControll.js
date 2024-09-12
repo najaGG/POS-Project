@@ -2,6 +2,7 @@ const express = require('express');
 const app = express();
 const ProductModel = require('../models/ProductModel');
 const service = require('./service');
+const DashboardModel = require('../models/DashboardModel');
 app.post('/product/insert', service.Islogin, async (req, res) => {
     try {
         let payload = req.body;
@@ -42,6 +43,10 @@ app.delete('/product/delete/:id', service.Islogin, async (req, res) => {
         const result = await ProductModel.update(
             { status: 'close' },
             { where: { id: req.params.id } }
+        );
+        await DashboardModel.update(
+            { status: 'close' },
+            { where: { productID: req.params.id } }
         );
 
         res.send({ result: result, message: 'success' });
