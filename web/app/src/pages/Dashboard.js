@@ -39,7 +39,7 @@ function Dashboard() {
             const res = await axios.get(config.api_path + '/datas/dashboard', config.headers());
             if (res.data.message === 'success') {
                 setDatas(res.data.result);
-    
+
                 const names = res.data.result.reduce((acc, item) => {
                     acc[item.productID] = item.nameProduct;
                     return acc;
@@ -117,15 +117,10 @@ function Dashboard() {
                 }
             ],
         };
-    
         return chartData;
     };
     
-    
-    
-
     const uniqueProductIDs = [...new Set(datas.map(item => item.productID))];
-
     return (
         <Template>
             <div>
