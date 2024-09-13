@@ -23,6 +23,9 @@ const DashboardModel = conn.define('dashboard',{
     all:{
         type: DataTypes.BIGINT,
         defaultValue: 0
+    },
+    status:{
+        type: DataTypes.STRING,
     }
 })
 

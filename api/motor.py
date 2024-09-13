@@ -1,58 +1,97 @@
 import sys
 import json
+from gpiozero import PWMOutputDevice
+from time import sleep
+from gpiozero import Motor
 
-# รับ JSON string จาก argument
+buzzer = PWMOutputDevice(21)  
+
+C3 = 130.81
+D3 = 146.83
+E3 = 164.81
+F3 = 174.61
+G3 = 196.00
+A3 = 220.00
+B3 = 246.94
+C4 = 261.63
+D4 = 293.66
+E4 = 329.63
+F4 = 349.23
+G4 = 392.00
+A4 = 440.00
+B4 = 493.88
+C5 = 523.25
+E5 = 659.26
+G5 = 783.99
+
+mario_melody = [
+    (E4, 0.15), (E4, 0.15), (E4, 0.15), (C4, 0.1), (E4, 0.15), (G4, 0.2), (G3, 0.2),
+    (C4, 0.15), (G3, 0.15), (E3, 0.15), (A3, 0.15), (B3, 0.15), (A3, 0.15), (G3, 0.15),
+    (E4, 0.15), (G4, 0.15), (A4, 0.15), (F4, 0.15), (G4, 0.15), (E4, 0.15), (C4, 0.15),
+    (D4, 0.15), (B3, 0.15)
+]
+
 json_data = sys.argv[1]
 
-# แปลง JSON string เป็น list ของ dictionaries
 data_list = json.loads(json_data)
 
-# ตรวจสอบข้อมูลที่ได้รับ
 print("Data received:")
-print(data_list)  # แสดงข้อมูลที่ได้รับ
+print(data_list)  
 
-# ฟังก์ชันสำหรับควบคุมมอเตอร์
-def control_motor(motorid, numberrounds):
-    # กำหนดพิน GPIO สำหรับมอเตอร์แต่ละตัว (ปรับตามการเชื่อมต่อของคุณ)
-    from gpiozero import Motor
-    from time import sleep
+def play_tone(frequency, duration):
+    buzzer.frequency = frequency
+    buzzer.value = 1.0  
+    sleep(duration)
+    buzzer.off()  
+    sleep(0.05)  
 
+# Play the melody
+for note, duration in mario_melody:
+    play_tone(note, duration)
+
+
+json_data = sys.argv[1]
+
+data_list = json.loads(json_data)
+
+print("Data received:")
+print(data_list) 
+
+def control_motor(motorid, numberrounds, pwm_speed=0.5):
     motor_pins = {
-        1: Motor(forward=6, backward=12),
-        2: Motor(forward=19, backward=16),
-        3: Motor(forward=26, backward=20),
+        1: Motor(forward=6, backward=12, pwm=True), 
+        2: Motor(forward=19, backward=16, pwm=True),
+        3: Motor(forward=26, backward=20, pwm=True),
     }
 
     motor = motor_pins.get(motorid)
     if motor:
-        time_per_round = 1  # เวลาหมุนต่อรอบ (ปรับตามความเร็วของมอเตอร์)
+        time_per_round = 1  
         for _ in range(numberrounds):
-            motor.forward()  # หมุนไปข้างหน้า
+            motor.forward(speed=pwm_speed)  
             sleep(time_per_round)
-            motor.stop()  # หยุดมอเตอร์
-            sleep(0.5)  # เวลาหยุดระหว่างรอบ (ปรับตามความเหมาะสม)
+            motor.stop() 
+            sleep(1)  
 
-        # แสดงผลลัพธ์ใน console
-        print(f"Motor ID: {motorid}, Number of Rounds: {numberrounds}")
+        print(f"Motor ID: {motorid}, Number of Rounds: {numberrounds}, PWM Speed: {pwm_speed}")
     else:
         print(f"Motor ID {motorid} not recognized.")
 
-# วนลูปผ่านแต่ละรายการใน data_list
 for data in data_list:
     if isinstance(data, dict):
         motorid = data.get('motorid')
         numberrounds = data.get('numberrounds')
+        pwm_speed = data.get('pwm_speed', 1.0) 
+
         if motorid is not None and numberrounds is not None:
-            # แปลง motorid และ numberrounds ให้เป็น integer
             motorid = int(motorid)
             numberrounds = int(numberrounds)
-            control_motor(motorid, numberrounds)
+            pwm_speed = float(pwm_speed) 
+            control_motor(motorid, numberrounds, pwm_speed)
         else:
             print("Invalid data format:", data)
     else:
         print("Unexpected data format:", data)
 
-# ส่งผลลัพธ์กลับไปยัง Node.js
 sys.stdout.flush()
-
-
+buzzer.off()
