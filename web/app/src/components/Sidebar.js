@@ -39,7 +39,7 @@ function Sidebar() {
                     <div className="user-panel mt-3 pb-3 mb-3 d-flex">
                     <i class="fa-solid fa-user mt-3 ms-4" style={{color: "#ffffff"}}></i>
                         <div className="info">
-                            <span className="text-light ms-1 d-block" style={{fontSize:20}}>phone:{userName}</span>
+                            <span className="text-light ms-1 d-block" style={{fontSize:20}}>Phone{userName}</span>
                         </div>
                     </div>
                     <nav className="mt-2">
@@ -60,7 +60,7 @@ function Sidebar() {
                                         <Link to = '/Editproduct' className="nav-link">
                                         <i className="fa-solid fa-cart-plus fa-xl ms-1"></i>
                                             <p className='ms-3'style={{fontSize:24}}>
-                                                แก้ไขสินค้า
+                                                Edit Product
                                             </p>
                                         </Link>
                                     </li>

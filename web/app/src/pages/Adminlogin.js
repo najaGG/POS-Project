@@ -76,7 +76,7 @@ function Home() {
         
             <div className="containers">
             
-                <div className="bg"></div>
+                <div className="kmitlpcc"></div>
                 
                 <div className="form-container"> 
                 <div className="text-center mb-2" style={{fontSize:20}}>AdminPage</div>
