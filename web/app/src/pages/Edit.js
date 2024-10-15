@@ -1,20 +1,21 @@
+
 import Template from "../components/TemplateAdmin";
 import axios from "axios";
 import config from "../config";
 import Swal from "sweetalert2";
 import { useState, useEffect } from "react";
 import Modal from "../components/Model";
-
+{/*---------------- สร้างที่เก็บตัวแปรที่ใช้ภายในหน้าเว็บแอปพลิเคชัน ------------------ */}
 function Editproduct() {
     const [product, setProduct] = useState({})
     const [productImage, setProductImage] = useState({});
     const [products, setProducts] = useState([]);
     const [productImg, setProductImg] = useState([]);
-
+    {/*------------ เรียกฟังก์ชันดังกล่าวเมื่อมีการเข้าเว็บแอปพลิเคชัน -------------- */}
     useEffect(() => {
         fatchData()
     }, [])
-
+    {/*---------------- ฟังก์ชันเรียนกข้อมูลของสินค้ามาแสดงผล ------------------ */}
     const fatchData = async () => {
         try {
             await axios.get(config.api_path + "/product/list", config.headers()).then(res => {
@@ -31,7 +32,7 @@ function Editproduct() {
             })
         }
     }
-
+    {/*---------------- ฟังก์ชันการปิด modal------------------ */}
     const close = () => {
         const closebtn = document.getElementsByClassName('btn-Close');
         for (let i = 0; i < closebtn.length; i++) {
@@ -48,6 +49,7 @@ function Editproduct() {
             barcode: ''
         });
     }
+    {/*---------------- ฟังก์ชันการยืนยันการเพิ่มรูป ------------------ */}
     const saveImg = () => {
         Swal.fire({
             title: "ยืนยันการเพิ่มรูปภาพใหม่",
@@ -61,7 +63,7 @@ function Editproduct() {
             }
         })
     }
-
+    {/*---------------- ฟังก์ชันการเพิ่มสินค้าใหม่ ------------------ */}
     const handlesave = async (e) => {
         e.preventDefault();
         try {
@@ -92,6 +94,7 @@ function Editproduct() {
             })
         }
     }
+    {/*---------------- ฟังก์ชันการเพิ่มรูปภาพใหม่ของสินค้านั้น------------------ */}
     const handlesavePic = async () => {
         try {
             const _config = {
@@ -128,7 +131,7 @@ function Editproduct() {
     const handleChange = (files) => {
         setProductImage(files[0]);
     }
-
+    {/*---------------- ฟังก์ชันเรียกข้อมูลรูปภาพของสินค้านั้นมาแสดงผล ------------------ */}
     const fatchDataproductImg = async (item) => {
         try {
             await axios.get(config.api_path + "/productImage/list/" + item.id, config.headers()).then(res => {
@@ -147,12 +150,12 @@ function Editproduct() {
             })
         }
     }
-
+    {/*---------------- ฟังก์ชันการเลือกรูป ------------------ */}
     const handlechoose = (item) => {
         setProduct(item);
         fatchDataproductImg(item);
     }
-
+    {/*---------------- ฟังก์ชันการเลือกรูปหลักที่จะแสดงผล ------------------ */}
     const hendleChooseMainImage = (item) => {
         Swal.fire({
             title: "เลือกภาพหลัก",
@@ -189,7 +192,7 @@ function Editproduct() {
             }
         })
     }
-
+    {/*---------------- ฟังก์ชันการลบรูปภาพของสินค้าที่เลือก ------------------ */}
     const hendleDeleteImage = (item) => {
         try {
             Swal.fire({
@@ -225,7 +228,7 @@ function Editproduct() {
             })
         }
     }
-
+    {/*---------------- ฟังก์ชันการลบข้อมูลของสินค้าที่กดเลือก ------------------ */}
     const handleDelete = (item) => {
         Swal.fire({
             title: 'ลบข้อมูล',
@@ -261,6 +264,7 @@ function Editproduct() {
 
     return (
         <>
+        {/*---------------- โค้ดแสดงหน้าเว็บแอปพลิเคชัน ------------------ */}
             <Template>
                 <div className="row">
                     <p className="text-start" style={{fontSize:'24px'}}><storng>เพิ่มสินค้า</storng></p>
@@ -310,8 +314,6 @@ function Editproduct() {
                             </select>
                         </div>
                     </div>
-
-
                 </div>
                 <div className="mt-2 text-center">
                     <button type="submit" className="btn btn-primary mb-3" onClick={handlesave}>บันทึก</button>

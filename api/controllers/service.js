@@ -1,3 +1,4 @@
+{/*------------ ไฟล์ service ช่วยในการเขียนสิ่งที่ต้องเขียนซ่ำๆ ------------- */}
 module.exports = {
     getToken: (req) => {
         return req.headers.authorization.replace('Bearer ','');

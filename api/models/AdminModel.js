@@ -1,3 +1,4 @@
+{/*------------ ไฟล์ AdminModel.js ใช้สร้างฐานข้อมูล ------------- */}
 const conn = require('../connect');
 const { Sequelize, DataTypes } = require('sequelize');
 const AdminModel = conn.define('admin',{

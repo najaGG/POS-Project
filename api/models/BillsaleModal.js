@@ -1,3 +1,4 @@
+{/*------------ ไฟล์ BillsaleModal.js ใช้สร้างฐานข้อมูล ------------- */}
 const conn = require('../connect');
 const { Sequelize, DataTypes } = require('sequelize');
 const BillsaleModal = conn.define('billsale', {

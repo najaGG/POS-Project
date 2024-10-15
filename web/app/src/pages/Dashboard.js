@@ -25,15 +25,15 @@ ChartJS.register(
     Tooltip,
     Legend
 );
-
+{/*---------------- สร้างที่เก็บตัวแปรที่ใช้ภายในหน้าเว็บแอปพลิเคชัน ------------------ */}
 function Dashboard() {
     const [datas, setDatas] = useState([]);
     const [productNames, setProductNames] = useState({});
-
+    {/*------------ เรียกฟังก์ชันดังกล่าวเมื่อมีการเข้าเว็บแอปพลิเคชัน -------------- */}
     useEffect(() => {
         fetchdata();
     }, []);
-
+    {/*---------------- ฟังก์ชันเรียกData ข้อมูลของรายการขายสินค้า ------------- */}
     const fetchdata = async () => {
         try {
             const res = await axios.get(config.api_path + '/datas/dashboard', config.headers());
@@ -59,35 +59,37 @@ function Dashboard() {
 
     const formatChartData = (data, productID) => {
         const currentMonthYear = moment().format('YYYY-MM');
-    
+        
         // Filter data for the current month and year
         const filteredData = data.filter(item => 
             item.productID === productID && 
             moment(item.createdAt).format('YYYY-MM') === currentMonthYear
         );
-    
+        
+        // Group data by day and keep only the latest entry for each day
         const groupedData = {};
-        let previousAll = 0;  
-    
         filteredData.forEach(item => {
             const day = parseInt(moment(item.createdAt).format('D'), 10);
-    
-            if (!groupedData[day]) {
-                groupedData[day] = { stockD: 0, decrease: 0, all: 0 };
+            
+            // If this is the first time we see this day or this entry is more recent
+            if (!groupedData[day] || moment(item.createdAt).isAfter(moment(groupedData[day].createdAt))) {
+                groupedData[day] = {
+                    stockD: parseInt(item.stockD || 0),
+                    decrease: parseInt(item.decrease || 0),
+                    all: 0,  // This will be computed later
+                    createdAt: item.createdAt // To track the most recent data
+                };
             }
-    
-            groupedData[day].stockD += parseInt(item.stockD || 0);
-    
-            groupedData[day].decrease += parseInt(item.decrease || 0);
         });
-    
+        
+        let previousAll = 0;
         const labels = getDaysInMonth(currentMonthYear);
         labels.forEach(day => {
-            const currentData = groupedData[day] || { stockD: 0, decrease: 0, all: 0 };
+            const currentData = groupedData[day] || { stockD: 0, decrease: 0, all: previousAll };
+            
             currentData.all = previousAll + currentData.stockD - currentData.decrease;
-
             previousAll = currentData.all;
-
+            
             groupedData[day] = currentData;
         });
     
@@ -117,8 +119,10 @@ function Dashboard() {
                 }
             ],
         };
+    
         return chartData;
     };
+    
     
     const uniqueProductIDs = [...new Set(datas.map(item => item.productID))];
     return (

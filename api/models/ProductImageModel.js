@@ -1,3 +1,4 @@
+{/*------------ ไฟล์ ProductImageModel.js ใช้สร้างฐานข้อมูล ------------- */}
 const conn = require('../connect');
 const {sequelize ,DataTypes} = require('sequelize');
 const ProductImage = conn.define('productimage',{
@@ -16,6 +17,5 @@ const ProductImage = conn.define('productimage',{
         type: DataTypes.BOOLEAN,
     }
 })
-
 ProductImage.sync({alter: true});
 module.exports = ProductImage;

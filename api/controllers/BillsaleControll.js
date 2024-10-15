@@ -1,3 +1,4 @@
+{/*------------ ไฟล์ BillsaleControll.js ------------- */}
 const express = require('express');
 const app = express();
 const service = require('./service')
@@ -10,6 +11,7 @@ const { Sequelize } = require('sequelize');
 
 require('dotenv').config()
 
+{/*------------ API สำหรับ การเปิดบิลใหม่ ------------- */}
 app.get('/billsale/openbill', service.Islogin, async (req, res) => {
     try {
         const payload = {
@@ -28,7 +30,7 @@ app.get('/billsale/openbill', service.Islogin, async (req, res) => {
         res.send({ message: e.message });
     }
 })
-
+{/*------------ API สำหรับ การขายสินค้า เพิ่ม / ลดสินค้า ------------- */}
 app.post('/product/sale', service.Islogin, async (req, res) => {
     try {
         const ProductModel = require('../models/ProductModel');
@@ -97,7 +99,7 @@ app.post('/product/sale', service.Islogin, async (req, res) => {
         res.status(500).send({ message: e.message });
     }
 });
-
+{/*------------ API สำหรับ การเรียกบิลปัจจุบันมาแสดงผล ------------- */}
 app.get('/Bill/currentInfo', service.Islogin, async (req, res) => {
     try {
         const BuyproductModel = require('../models/BuyproductModel');
@@ -130,7 +132,7 @@ app.get('/Bill/currentInfo', service.Islogin, async (req, res) => {
         res.send({ message: e.message });
     }
 })
-
+{/*------------ API สำหรับ การปิดการขาย ------------- */}
 app.get('/bill/end', service.Islogin, async (req, res) => {
     try {
         const BuyproductModel = require('../models/BuyproductModel');

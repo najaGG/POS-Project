@@ -1,3 +1,5 @@
+''' ไฟล์ขับมอเตอร์และเรียกใช้งาน buzzer '''
+
 import sys
 import json
 from gpiozero import PWMOutputDevice

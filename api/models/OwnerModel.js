@@ -1,3 +1,4 @@
+{/*------------ ไฟล์ Onwer.js ใช้สร้างฐานข้อมูล ------------- */}
 const conn = require('../connect');
 const { Sequelize, DataTypes } = require('sequelize');
 const OwnerModel = conn.define('owner',{
@@ -17,7 +18,5 @@ const OwnerModel = conn.define('owner',{
         defaultValue: 'Owner'
     }
 })
-
 OwnerModel.sync({alter:true});
-
 module.exports = OwnerModel;

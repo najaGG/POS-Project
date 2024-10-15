@@ -1,3 +1,4 @@
+{/*------------ ไฟล์ BuyproductModel.js ใช้สร้างฐานข้อมูล ------------- */}
 const conn = require('../connect');
 const { Sequelize, DataTypes } = require('sequelize');
 const BuyproductModel = conn.define('buyproduct', {
@@ -22,6 +23,5 @@ const BuyproductModel = conn.define('buyproduct', {
         type: DataTypes.BIGINT,
     },
 })
-
 BuyproductModel.sync({ alter: true });
 module.exports = BuyproductModel;

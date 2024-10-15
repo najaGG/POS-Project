@@ -1,8 +1,9 @@
+{/*------------ ไฟล์ DashboardControll.js ------------- */}
 const express = require('express');
 const app = express();
 const DashboardModel = require('../models/DashboardModel');
 const { Op, Sequelize } = require('sequelize');
-
+{/*------------ API สำหรับ การสร้างข้อมูลลง dashboard ------------- */}
 app.post('/data/dashboard', async (req, res) => {
     try {
         let payload = req.body;
@@ -12,7 +13,7 @@ app.post('/data/dashboard', async (req, res) => {
         res.status(500).send(e.message);
     }
 })
-
+{/*------------ API สำหรับ การดึงข้อมูลไปแสดงผลเป็น dashboard ------------- */}
 app.get('/datas/dashboard', async (req, res) => {
     try {
         const allData = await DashboardModel.findAll({

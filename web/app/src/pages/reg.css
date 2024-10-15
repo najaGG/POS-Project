@@ -1,3 +1,4 @@
+/*--- ไฟล์ reg.css ใช้สำหรับตกแต่งหน้าเว็บที่ใช้ login ของ admin และ member --- */
 .containers {
     display: flex;
     justify-content: center;
@@ -53,3 +54,4 @@
     right: 0;
     margin: 10px;
 }
+
