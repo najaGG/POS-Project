@@ -1,9 +1,11 @@
+{/*------------ ไฟล์ MemberControll.js ------------- */}
 const express = require('express');
 const app = express();
 const MemberModel = require('../models/MemberModel');
 const jwt = require('jsonwebtoken');
 const service = require('./service');
 
+{/*------------ API สำหรับ การโชว์ข้อมูลพื้นฐานของ member ------------- */}
 app.get('/member/info', service.Islogin, async (req, res) => {
     try {
         const token = service.getToken(req);
@@ -18,6 +20,7 @@ app.get('/member/info', service.Islogin, async (req, res) => {
     }
 })
 
+{/*------------ API สำหรับ การเรียกจำนวนเหรียญปัจจุบันของผู้ใช้ ------------- */}
 app.post('/member/coins', async (req, res) => {
     try {
         let payload = req.body
@@ -34,7 +37,7 @@ app.post('/member/coins', async (req, res) => {
     }
 
 })
-
+{/*------------ API สำหรับ การเพิ่มบัญชีผู้ใช้งานใหม่ ------------- */}
 app.post('/member/insert', service.Islogin, async (req, res) => {
     try {
         const member = await MemberModel.findAll({

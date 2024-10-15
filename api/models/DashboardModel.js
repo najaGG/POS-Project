@@ -1,3 +1,4 @@
+{/*------------ ไฟล์ DashboardModel.js ใช้สร้างฐานข้อมูล ------------- */}
 const conn = require('../connect');
 const {sequelize ,DataTypes} = require('sequelize');
 const DashboardModel = conn.define('dashboard',{
@@ -28,6 +29,5 @@ const DashboardModel = conn.define('dashboard',{
         type: DataTypes.STRING,
     }
 })
-
 DashboardModel.sync({alter: true});
 module.exports = DashboardModel;

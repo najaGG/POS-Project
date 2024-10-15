@@ -1,11 +1,12 @@
+
 import Swal from "sweetalert2";
 import configMember from "../configMember";
 import { useNavigate } from "react-router-dom";
 
 function Navbar() {
-
+    {/*------------ สร้างการส่งต่อหน้าแอปพลิเคชัน -------------- */}
     const navigate = useNavigate();
-
+{/*------------ ฟังก์ชันสำหรับการล็อกเอ้าออกไปจากระบบ -------------- */}
     const handleSingout = () =>{
         Swal.fire({
             title: "ยืนยันการออก",
@@ -21,6 +22,7 @@ function Navbar() {
     }
     return (
         <>
+         {/*---------------- โค้ดแสดงหน้าเว็บแอปพลิเคชัน ------------------ */}
             <nav className="main-header navbar navbar-expand navbar-white navbar-light">
                 <ul className="navbar-nav">
                     <li className="nav-item">

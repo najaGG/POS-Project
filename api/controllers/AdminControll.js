@@ -1,13 +1,15 @@
+{/*------------ ไฟล์ AdminControll.js ------------- */}
 const express = require('express');
 const app = express();
 const AdminModel = require('../models/AdminModel');
 require('dotenv').config();
 const jwt = require('jsonwebtoken');
 const service = require('./service');
-
+{/*------------ API สำหรับ การเพิ่ม admin คนใหม่ ------------- */}
 app.post('/admin/insert', async (req, res) => {
     try{
         let payload = req.body;
+        //INSERT INTO adminModel() VALUES (payload.name)
         await AdminModel.create(payload);
         res.send({message: "success"});
     }catch(e){
@@ -15,7 +17,7 @@ app.post('/admin/insert', async (req, res) => {
         res.send({message: e.message});
     }
 })
-
+{/*------------ API สำหรับ การตรวจสอบการล็อกอินของ admin ------------- */}
 app.post('/admin/login', async (req, res) => {
     try{
         const member = await AdminModel.findAll({
@@ -37,7 +39,7 @@ app.post('/admin/login', async (req, res) => {
         res.send({message: e});
     }
 })
-
+{/*------------ API สำหรับ การเรียกข้อมูลพื้นฐานของ admin ------------- */}
 app.get('/admin/info',service.Islogin, async (req, res) => {
     try{
         const token = service.getToken(req);

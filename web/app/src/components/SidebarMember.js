@@ -1,17 +1,19 @@
+
 import { useState, useEffect } from "react";
 import Swal from "sweetalert2";
 import axios from "axios";
 import config from "../config";
 import configMember from "../configMember";
 import { Link } from "react-router-dom";
-
+{/*---------------- สร้างที่เก็บตัวแปรที่ใช้ภายในหน้าเว็บแอปพลิเคชัน ------------------ */}
 function Sidebar() {
     const [userName, setUserName] = useState();
     const [coins , setCoins] = useState();
+    {/*------------ เรียกฟังก์ชันดังกล่าวเมื่อมีการเข้าเว็บแอปพลิเคชัน -------------- */}
     useEffect(() => {
         fetchData();
     }, [])
-
+    {/*---------------- ฟังก์ชันเรียนกข้อมูลของสินค้ามาแสดงผล ------------------ */}
     const fetchData = async () => {
         try {
             axios.get(config.api_path + '/member/info', configMember.headers()).then(res => {
@@ -32,6 +34,7 @@ function Sidebar() {
     }
     return (
         <>
+         {/*---------------- โค้ดแสดงหน้าเว็บแอปพลิเคชัน ------------------ */}
             <aside className="main-sidebar sidebar-dark-primary elevation-4">
                 <a href="#" className="brand-link">
                     <img src="dist/img/logo-top.png" className="brand-image img-circle elevation-3" style={{ opacity: .8 }} />

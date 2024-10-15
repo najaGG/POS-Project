@@ -5,13 +5,14 @@ import axios from "axios";
 import config from "../config";
 import Swal from "sweetalert2";
 import './Allproduct.css'
-
+{/*---------------- สร้างที่เก็บตัวแปรที่ใช้ภายในหน้าเว็บแอปพลิเคชัน ------------------ */}
 function Allproduct() {
     const [products, setProducts] = useState([]);
+    {/*------------ เรียกฟังก์ชันดังกล่าวเมื่อมีการเข้าเว็บแอปพลิเคชัน -------------- */}
     useEffect(() => {
         fatchData()
     }, [])
-
+    {/*---------------- ฟังก์ชันเรียกData ข้อมูลของรายการขายสินค้า ------------------ */}
     const fatchData = async () => {
         try {
             await axios.get(config.api_path + '/product/listsale', config.headers()).then(res => {
@@ -32,6 +33,7 @@ function Allproduct() {
 
     return (
         <>
+        {/*---------------- โค้ดแสดงหน้าเว็บแอปพลิเคชัน ------------------ */}
             <TemplateAdmin>
                 <div className="row row-cols-1 row-cols-md-3 g-4">
                     {products.length > 0 ? products.map((item) => (

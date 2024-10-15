@@ -1,8 +1,10 @@
+{/*------------ ไฟล์ ProductControll.js ------------- */}
 const express = require('express');
 const app = express();
 const ProductModel = require('../models/ProductModel');
 const service = require('./service');
 const DashboardModel = require('../models/DashboardModel');
+{/*------------ API สำหรับ การเพิ่มสินค้า ------------- */}
 app.post('/product/insert', service.Islogin, async (req, res) => {
     try {
         let payload = req.body;
@@ -21,9 +23,10 @@ app.post('/product/insert', service.Islogin, async (req, res) => {
         res.status(500).send({ message: e.message });
     }
 });
-
+{/*------------ API สำหรับ การโชว์ List รายการสินค้า ให้ admin ------------- */}
 app.get('/product/list', service.Islogin, async (req, res) => {
     try {
+        
         const result = await ProductModel.findAll({
             where: {
                 adminID: service.getAdminId(req),
@@ -37,7 +40,7 @@ app.get('/product/list', service.Islogin, async (req, res) => {
         res.send({ message: e.message })
     }
 })
-
+{/*------------ API สำหรับ การยกเลิกการขายของสินค้า ------------- */}
 app.delete('/product/delete/:id', service.Islogin, async (req, res) => {
     try {
         const result = await ProductModel.update(
@@ -55,7 +58,7 @@ app.delete('/product/delete/:id', service.Islogin, async (req, res) => {
         res.send({ message: e.message });
     }
 })
-
+{/*------------ API สำหรับ การอัพเดทข้อมูลสินค้า ------------- */}
 app.post('/product/update', service.Islogin, async (req, res) => {
     try {
         let payload = req.body;
@@ -72,7 +75,7 @@ app.post('/product/update', service.Islogin, async (req, res) => {
         res.send({ message: e.message });
     }
 })
-
+{/*------------ API สำหรับ การโชว์ List รายการสินค้าสำหรับขาย ------------- */}
 app.get('/product/listsale', service.Islogin, async (req, res) => {
     const ProductImageModel = require('../models/ProductImageModel');
     ProductModel.hasMany(ProductImageModel, { foreignKey: 'productID' });

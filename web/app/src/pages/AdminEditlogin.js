@@ -1,3 +1,4 @@
+
 import axios from "axios";
 import config from "../config";
 import Swal from "sweetalert2";
@@ -5,14 +6,14 @@ import { useState } from "react";
 import './reg.css'
 import { useNavigate } from "react-router-dom";
 import hashSum from 'hash-sum';
-
+{/*---------------- สร้างที่เก็บตัวแปรที่ใช้ภายในหน้าเว็บแอปพลิเคชัน ------------------ */}
 function EditAdmin() {
     const [input1Value, setInput1Value] = useState('');
     const [input2Value, setInput2Value] = useState('');
     const [selectedInput, setSelectedInput] = useState(null);
-
+{/*------------ สร้างการส่งต่อหน้าแอปพลิเคชัน -------------- */}
     const navigate = useNavigate();
-
+{/*------------ ฟังก์ชันการตรวจสอบข้อมูลการล็อกอินกับฐานข้อมูล -------------- */}
     const handleLogin = async () => {
         try {
             if (input1Value === '' || input2Value === '') {
@@ -51,6 +52,7 @@ function EditAdmin() {
             })
         }
     }
+    {/*------------ ฟังก์ชันการกรอกเลขเบอร์มือถือและ pin -------------- */}
     const handleNumpadClick = (value) => {
         if (selectedInput === 1) {
             setInput1Value(prevValue => prevValue + value);
@@ -58,6 +60,7 @@ function EditAdmin() {
             setInput2Value(prevValue => prevValue + value);
         }
     };
+    {/*------------ ฟังก์ชันการลบเลขที่กรอกในฟอร์มเลขเบอร์มือถือและ pin -------------- */}
     const handledel = () => {
         if (selectedInput === 1) {
             setInput1Value(prevValue => prevValue.slice(0, -1));
@@ -65,11 +68,13 @@ function EditAdmin() {
             setInput2Value(prevValue => prevValue.slice(0, -1));
         }
     }
+    {/*---------------- ฟังก์ชันการส่งหน้ากลับไปยัง memberlogin ------------------ */}
     const handleBack = () =>{
         navigate('/memberlogin')
     }
     return (
         <>
+        {/*---------------- โค้ดแสดงหน้าเว็บแอปพลิเคชัน ------------------ */}
             <div className="containers">
                 <div className="kmitlpcc"></div>
                 <div className="form-container">

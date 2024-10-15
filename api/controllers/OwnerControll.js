@@ -1,9 +1,10 @@
+{/*------------ ไฟล์ ownerControll.js ------------- */}
 const express = require('express');
 const app = express();
 const OwnerModel = require('../models/OwnerModel');
 require('dotenv').config();
 const jwt = require('jsonwebtoken');
-
+{/*------------ API สำหรับ การตรวจสอบ owner ------------- */}
 app.post('/owner/check', async (req, res) => {
     try{
         const Owner = await OwnerModel.findAll({
@@ -25,7 +26,7 @@ app.post('/owner/check', async (req, res) => {
         res.send({message: e});
     }
 })
-
+{/*------------ API สำหรับ การเพิ่ม owner ใหม่------------- */}
 app.post('/owner/insert', async (req, res) => {
     try{
         let payload = req.body;

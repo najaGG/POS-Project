@@ -1,3 +1,4 @@
+{/*------------ ไฟล์ MemberModel.js ใช้สร้างฐานข้อมูล ------------- */}
 const conn = require('../connect');
 const {sequelize ,DataTypes} = require('sequelize');
 const MemberModel = conn.define('member',{
@@ -24,6 +25,5 @@ const MemberModel = conn.define('member',{
         defaultValue:0
     }
 })
-
 MemberModel.sync({alter: true});
 module.exports = MemberModel;

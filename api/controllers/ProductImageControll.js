@@ -1,12 +1,13 @@
+{/*------------ ไฟล์ ProductimageControll.js ------------- */}
 const express = require('express');
 const app = express();
 const ProductImageModel = require('../models/ProductImageModel');
 const fileUpload = require('express-fileupload');
 const fs = require('fs');
 const service = require('./service');
-
+{/*------------ ไฟล์ ProductImageControll.js ------------- */}
 app.use(fileUpload());
-
+{/*------------ API สำหรับ การเพิ่มรูป ------------- */}
 app.post('/picture/insert', service.Islogin, async (req, res) => {
     try {
         const productImage = req.files.productImage;
@@ -43,7 +44,7 @@ app.post('/picture/insert', service.Islogin, async (req, res) => {
         res.send({ message: e.message });
     }
 })
-
+{/*------------ API สำหรับ การทำListรูปภาพของสินค้านั้นๆ------------- */}
 app.get('/productImage/list/:productID', service.Islogin, async (req, res) => {
     try {
         const result = await ProductImageModel.findAll({
@@ -58,6 +59,7 @@ app.get('/productImage/list/:productID', service.Islogin, async (req, res) => {
         res.send({message: e.message});
     }
 });
+{/*------------ API สำหรับ การเลือกรูปภาพหลักที่แสดงผล ------------- */}
 app.get('/productImage/chooseMainImage/:id/:productID', service.Islogin , async (req,res)=>{
     try{
         await ProductImageModel.update({
@@ -80,7 +82,7 @@ app.get('/productImage/chooseMainImage/:id/:productID', service.Islogin , async 
         res.send({message: e.message});
     }
 })
-
+{/*------------ API สำหรับ การลบรูปภาพ ------------- */}
 app.delete('/productImage/delete/:id', service.Islogin , async (req,res)=>{
     try{
         const row = await ProductImageModel.findByPk(req.params.id);

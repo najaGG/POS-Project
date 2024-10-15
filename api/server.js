@@ -1,3 +1,4 @@
+{/*------------ ไฟล์ server สำรหับติดต่อข้อมูลกับฐานข้อมูล -------------- */}
 const express = require('express');
 const cors = require('cors');
 const app = express();
@@ -7,7 +8,7 @@ const bodyParser = require('body-parser');
 app.use(cors());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
-
+{/*------------ การดึงข้อมูลมาใช้งาน -------------- */}
 const ProductControll = require('./controllers/ProductControll');
 const AdminControll = require('./controllers/AdminControll');
 const MemberControll = require('./controllers/MemberControll');
@@ -16,7 +17,7 @@ const BuyproductControll = require('./controllers/BuyproductControll');
 const DashboardControll = require('./controllers/DashboardControll');
 const OwnerControll = require('./controllers/OwnerControll');
 const BillsaleControll = require('./controllers/BillsaleControll');
-
+{/*------------ สั่งการใช้งาน -------------- */}
 app.use('/uploads', express.static('uploads'))
 app.use(DashboardControll);
 app.use(BuyproductControll);
@@ -28,7 +29,7 @@ app.use(OwnerControll);
 app.use(BillsaleControll);
 
 const { spawn } = require('child_process');
-
+{/*------------ สร้าง API สำรหัยที่หยอดเหรียญให้เปิดทำงาน -------------- */}
 app.post('/api/call', (req, res) => {
     const { totalPrice } = req.body;
     if (totalPrice === undefined) {
@@ -54,7 +55,7 @@ app.post('/api/call', (req, res) => {
         res.send({ count: count, message: 'success' });
     });
 });
-
+{/*------------ สร้าง API สำหรับส่งข้อมูลไปยังมอเตอร์ตัวต่างๆ -------------- */}
 app.post('/api/motor', (req, res) => {
     const payload = req.body;
 
@@ -73,7 +74,7 @@ app.post('/api/motor', (req, res) => {
         console.error(`Error: ${data}`);
     });
 });
-
+{/*------------ ให้เปิด port รับฟังที่ 3555 -------------- */}
 app.listen(port, () => {
     console.log('listening on port ', port);
 })

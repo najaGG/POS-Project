@@ -1,3 +1,4 @@
+/* ไฟล์ App.css สำหรับตกแต่งหน้าตาเว็บแอปพลิเคชัน */
 .App {
   text-align: center;
 }
@@ -45,3 +46,4 @@
     transform: rotate(360deg);
   }
 }
+

@@ -1,3 +1,4 @@
+
 import { useState, useEffect } from "react";
 import Modal from "../components/Model";
 import Template from "../components/Template";
@@ -7,10 +8,9 @@ import Swal from "sweetalert2";
 import './Allproduct.css'
 import configMember from "../configMember"
 import { useNavigate } from "react-router-dom";
-
+{/*---------------- สร้างที่เก็บตัวแปรที่ใช้ภายในหน้าเว็บแอปพลิเคชัน ------------------ */}
 function Allproduct() {
     const navigate = useNavigate();
-
     const [products, setProducts] = useState([]);
     const [billSale, setBillSale] = useState({});
     const [Itemqty, setItemQty] = useState(0);
@@ -18,12 +18,15 @@ function Allproduct() {
     const [totalPrice, setTotalPrice] = useState(0);
     const [coins, setCoins] = useState();
     const [datas, setDatas] = useState([]);
+
+    {/*------------ เรียกฟังก์ชันดังกล่าวเมื่อมีการเข้าเว็บแอปพลิเคชัน -------------- */}
     useEffect(() => {
         fatchData()
         openBill()
         fatchBill()
         fetchcoin()
     }, [])
+    {/*---------------- เรียก data ใหม่ทุกครั้งที่มีการเคลื่อนไหว ------------------ */}
     useEffect(() => {
         if (datas.buyproducts) {
             const payloads = datas.buyproducts.map(product => ({
@@ -37,9 +40,12 @@ function Allproduct() {
             payloads.forEach(async (payload) => {
                 await datadashboard(payload);
             });
+            
         }
     }, [datas]);
 
+
+    {/*---------------- ฟังก์ชันเปิดบิลสำหรับสั่งซื้อสินค้า ------------------ */}
     const openBill = async () => {
         try {
             await axios.get(config.api_path + "/billsale/openbill", config.headers()).then(res => {
@@ -59,6 +65,7 @@ function Allproduct() {
         }
     }
 
+    {/*---------------- ฟังก์ชันเรียกจำนวนเงินของผู้ใช้งานที่เข้ามา ------------------ */}
     const fetchcoin = async () => {
         try {
             axios.get(config.api_path + '/member/info', configMember.headers()).then(res => {
@@ -76,7 +83,8 @@ function Allproduct() {
             })
         }
     }
-
+    
+    {/*---------------- ฟังก์ชันเรียกData ข้อมูลของรายการขายสินค้า ------------------ */}
     const fatchData = async () => {
         try {
             await axios.get(config.api_path + '/product/listsale', config.headers()).then(res => {
@@ -95,7 +103,8 @@ function Allproduct() {
             });
         }
     }
-
+    
+    {/*---------------- ฟังก์ชันเรียกบิลล่าสุดที่มีข้อมูลการสั่งซื้อ ------------------ */}
     const fatchBill = async () => {
         try {
             await axios.get(config.api_path + '/Bill/currentInfo', config.headers()).then(res => {
@@ -116,6 +125,7 @@ function Allproduct() {
         }
     }
 
+    {/*---------------- ฟังก์ชันรวมยอดเงินที่จำเป็นต้องจำหน่าย ------------------ */}
     const sumtotalprice = (buyproducts) => {
         let sum = 0
         for (let i = 0; i < buyproducts.length; i++) {
@@ -126,7 +136,7 @@ function Allproduct() {
         }
         setTotalPrice(sum);
     }
-
+    {/*-------------- ฟังก์ชันการเพิ่มหรือลดจำนวนสินค้าเมื่อมีการกดซื้อ ----------------- */}
     const buyproduct = async (item, action) => {
         try {
             item.action = action;
@@ -147,7 +157,7 @@ function Allproduct() {
             });
         }
     }
-
+    {/*---------------- ฟังก์ชันการขับมอเตอร์ ------------------ */}
     const motor = async () => {
         try {
             const payload = currentBill.buyproducts.map(products => ({
@@ -169,7 +179,7 @@ function Allproduct() {
             })
         }
     }
-
+    {/*---------------- ฟังก์ชันเก็บข้อมูล data ลงไปยัง dashboard ------------------ */}
     const datadashboard = async (payload) => {
         try {
             await axios.post(config.api_path + '/data/dashboard', payload)
@@ -183,11 +193,12 @@ function Allproduct() {
         }
 
     }
+    {/*---------------- ฟังก์ชันการออกจากระบบ ------------------ */}
     const handleSingout = () => {
         localStorage.removeItem(configMember.token_name);
         navigate('/memberlogin');
     }
-
+    {/*---------------- ฟังก์ชันจบการขายของบิลนั้นๆ --------------- */}
     const endsale = async () => {
         try {
             await axios.get(config.api_path + '/bill/end', config.headers()).then(res => {
@@ -213,7 +224,7 @@ function Allproduct() {
             });
         }
     }
-
+    {/*---------------- ฟังก์ชันการคำนวณยอดเงินคงเหลือภายในระบบ ------------------ */}
     const newcoins = async (UCion) => {
         try {
             let monney = parseInt(coins) + parseInt(UCion);
@@ -240,13 +251,14 @@ function Allproduct() {
             });
         }
     }
-
+    {/*---------------- ฟังก์ชันปิด modal ------------------ */}
     const close = () => {
         const closebtn = document.getElementsByClassName('btn-Close');
         for (let i = 0; i < closebtn.length; i++) {
             closebtn[i].click();
         }
     }
+    {/*---------------- ฟังก์ชันปิด modal2 ------------------ */}
     const close2 = () => {
         const modal = document.getElementById('modalEnd');
         if (modal) {
@@ -268,7 +280,7 @@ function Allproduct() {
             modal.setAttribute('aria-hidden', 'true');
         }
     };
-
+    {/*---------------- ฟังก์ชันการส่งข้อมูลไปยังฐานข้อมูลเมื่อชำระเงินสำเร็จ ------------------ */}
     const call = async (totalPrice) => {
         if (coins >= totalPrice) {
             newcoins(0)
@@ -313,6 +325,7 @@ function Allproduct() {
 
     return (
         <>
+        {/*---------------- โค้ดแสดงหน้าเว็บแอปพลิเคชัน ------------------ */}
             <Template>
                 <div className="row row-cols-1 row-cols-md-3 g-4">
                     {products.length > 0 ? products.map((item) => (
